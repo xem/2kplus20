@@ -1,0 +1,40 @@
+<center>
+<canvas id=a width=800 height=800 style="border:9px solid">
+<script>
+c=a.getContext("2d");
+
+m=[
+0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,
+0,0,1,0,0,0,0,0,
+0,1,1,0,0,0,2,3,
+1,1,1,1,3,1,1,1,
+1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,
+];
+
+for(i=0;i<8;i++){
+  for(j=0;j<8;j++){
+    a=(m[j*8+i]);
+    if(a == 1){
+      c.fillRect(i*98+5,j*98+5,98,98);
+    }
+    else if(a==2){
+      c.fillRect(500,230,50,70);
+      c.fillStyle="#fff";
+      c.fillRect(505,235,40,60);
+      c.fillStyle="#000";
+    }
+  }
+}
+
+x=0;
+y=0;
+
+c.font="50px a";
+c.translate(x*100+50,y*100+50);
+c.scale(-1,1);
+c.fillText("🏃\ufe0e",0,0);
+console.log(m.join(''))
+</script>
