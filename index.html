@@ -2,7 +2,8 @@
 <canvas id=canvas width=800 height=800 style="border:9px solid">
 <script>
 c=canvas.getContext("2d");
-
+jump = 0;
+fall = true;
 m=[
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,
@@ -64,12 +65,22 @@ console.log(m.join(''));
 
 if(get(x*100+50,y*100+50) == 0){
   y += .2;
+fall = true;
 }
 else {
-  //y += 0;
+  fall = false;
 }
-
-
+if(y>0){
+y -= jump / 15;
+}
+this.addEventListener('keypress', event => {
+    if (event.keyCode == 13 && !fall) {
+        jump = 10;  
+    }
+})
+if(jump>0){
+jump -= 1;
+}
 }, 33);
 
 </script>
