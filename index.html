@@ -2,8 +2,10 @@
 <canvas id=canvas width=800 height=800 style="border:9px solid">
 <script>
 c=canvas.getContext("2d");
-jump = 0;
-fall = true;
+
+E=R=T=_=s=e=u=d=l=r=0;
+onkeydown=onkeyup=z=>top['lurdlRdTl*urEu*_e**s'[(z.which+3)%20]]=z.type[3]<'u'
+
 m=[
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,
@@ -18,69 +20,93 @@ m=[
 get = (x, y) => {
   X = Math.floor(x/100);
   Y = Math.floor(y/100);
-  return m[Y * 8 + X];
+  //console.log(m[Y * 8 + X] || 0);
+  return m[Y * 8 + X] || 0;
+  
 }
 
-x=0;
-y=0;
+x = 0;
+y = 0;
+vy = 0;
+fall = 1;
 
 setInterval(()=>{
-canvas.width = canvas.width;
 
 
-for(i=0;i<8;i++){
-  for(j=0;j<8;j++){
-    a=(m[j*8+i]);
-    if(a == 1){
-      c.fillRect(i*98+5,j*98+5,98,98);
-    }
-    else if(a==2){
-      c.fillRect(i*98+5,j*98+5+28,50,70);
-      c.fillStyle="#fff";
-      c.fillRect(i*98+7,j*98+7+28,40,60);
-      c.fillStyle="#000";
-    }
-    else if(a==3){
-      c.font="50px a";
-      c.save();
-      c.translate(i*98-1,j*98+5+98);
-      c.scale(0.93,2.7);
-      c.fillText("▲", 0, 0);
-      c.fillText("▲", 35,0);
-      c.fillText("▲", 70,0);
-      c.restore();
-      
+  if(u && !fall){
+    vy = -1;
+    fall = 1;
+  }
+
+  // Reset
+  canvas.width = canvas.width;
+
+  // Draw map
+  for(i=0;i<8;i++){
+    for(j=0;j<8;j++){
+      a=(m[j*8+i]);
+      if(a == 1){
+        c.fillRect(i*100,j*100,100,100);
+      }
+      else if(a==2){
+        c.fillRect(i*100,j*100+30,50,70);
+        c.fillStyle="#fff";
+        c.fillRect(i*100+2,j*100+2+30,40,60);
+        c.fillStyle="#000";
+      }
+      else if(a==3){
+        c.font="50px a";
+        c.save();
+        c.translate(i*100-6,j*100+100);
+        c.scale(0.93,2.7);
+        c.fillText("▲", 0, 0);
+        c.fillText("▲", 35,0);
+        c.fillText("▲", 70,0);
+        c.restore();
+        
+      }
     }
   }
-}
+
+  // Draw hero
+  c.font="90px a";
+  c.save();
+  c.translate(x*100+100, y*100+40);
+  c.scale(-1,1);
+  c.fillText("🏃\ufe0e", 0, 0);
+  c.restore();
+  //console.log(m.join(''));
+
+  y += vy;
+
+  // Gravity (fall)
+  if(get(x*100+50,y*100+50) == 0){
+    vy += .05;
+    fall = true;
+  }
+  
+  // Grounded
+  else {
+    fall = false;
+    vy = 0;
+    y = Math.floor(y)*100-50
+  }
+  
+  if(y<0){
+    vy = 0;
+    y = 0;
+  }
+  
+  //console.log(vy);
 
 
-c.font="50px a";
-c.save();
-c.translate(x*100+50,y*100+50);
-c.scale(-1,1);
-c.fillText("🏃\ufe0e",0,0);
-c.restore();
-console.log(m.join(''));
 
-if(get(x*100+50,y*100+50) == 0){
-  y += .2;
-fall = true;
-}
-else {
-  fall = false;
-}
-if(y>0){
-y -= jump / 15;
-}
-this.addEventListener('keypress', event => {
+/*this.addEventListener('keypress', event => {
     if (event.keyCode == 13 && !fall) {
         jump = 10;  
     }
-})
-if(jump>0){
-jump -= 1;
-}
+})*/
+
 }, 33);
 
 </script>
