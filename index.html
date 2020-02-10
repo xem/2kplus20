@@ -17,26 +17,27 @@ m=[
 1,1,1,1,1,1,1,1,
 ];
 
+legs = 30;
+trunk = 50;
+rear = 80;
+front = 10;
+
+
 get = (x, y) => {
   X = Math.floor(x/100);
   Y = Math.floor(y/100);
-  //console.log(m[Y * 8 + X] || 0);
-  return m[Y * 8 + X] || 0;
+  return m[Y * 8 + X];
   
 }
 
-x = 0;
-y = 0;
+x = 80;
+y = 80;
 vy = 0;
-fall = 1;
+gravity = 2;
+jump = -10 * gravity;
+transx = 10;
 
 setInterval(()=>{
-
-
-  if(u && !fall){
-    vy = -1;
-    fall = 1;
-  }
 
   // Reset
   canvas.width = canvas.width;
@@ -69,44 +70,53 @@ setInterval(()=>{
   }
 
   // Draw hero
-  c.font="90px a";
-  c.save();
-  c.translate(x*100+100, y*100+40);
-  c.scale(-1,1);
-  c.fillText("🏃\ufe0e", 0, 0);
-  c.restore();
-  //console.log(m.join(''));
+  //c.font="60px a";
+  //c.save();
+  //c.translate(x, y);
+  //c.scale(-1,1);
+  c.fillRect(x-rear,y-trunk, rear + front, legs + trunk);
+  c.fillStyle="#fff";
 
-  y += vy;
-
+//  c.fillText("🏃\ufe0e", 0, 0);
+  c.restore(); 
+  
   // Gravity (fall)
-  if(get(x*100+50,y*100+50) == 0){
-    vy += .05;
-    fall = true;
+  if(get(x, y + legs + 10) == 0){ 
+    grounded = false;
+    vy += gravity;
   }
   
   // Grounded
   else {
-    fall = false;
+    grounded = true;
     vy = 0;
-    y = Math.floor(y)*100-50
+    y = Math.ceil((y+legs) / 100)*100 - legs;
   }
   
-  if(y<0){
+  if(y + legs < 0){
+    y = trunk;
+    vy = gravity;
+  }
+
+  if(y + legs > 800){
+    y = 800 - legs
     vy = 0;
-    y = 0;
+  }
+
+  if(u && grounded){
+    vy = jump;
+  }
+
+  if(l && x - rear > 0 && get(x - rear, y) == 0){
+     x -= transx;
+  }
+
+  if(r && x + front < 800 && get(x + front, y) == 0){
+     x += transx;
   }
   
-  //console.log(vy);
+  y += vy;
 
-
-
-/*this.addEventListener('keypress', event => {
-    if (event.keyCode == 13 && !fall) {
-        jump = 10;  
-    }
-})*/
-
-}, 33);
+},33);
 
 </script>
