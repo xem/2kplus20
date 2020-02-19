@@ -23,6 +23,11 @@ canjumpagain = 1;
 grounded = 0;
 dead = 0;
 won = 0;
+askshift = 0;
+shifted = 0; // 1 == black background + reverse gravity
+shiftframe = 0;
+
+heroscale = 1;
 
 c=canvas.getContext("2d");
 
@@ -33,7 +38,10 @@ onkeydown=onkeyup=z=>{
   
   top['lurdlRdTl*urEu*_e**s'[(z.which+3)%20]]=z.type[3]<'u';
   if(!u) canjumpagain = 1;
-  
+  if(s){
+    askshift = 1;
+    //shiftframe = 10;
+  }
 }
 
 // Map
@@ -76,129 +84,155 @@ setInterval(()=>{
         c.fillStyle="#000";
       }
       else if(a==2){
-        c.font="21px a";
-        c.save();
-        c.translate(i*cellsize-6,j*cellsize+55);
-        c.scale(1.4,3);
-        c.fillText("▲", 0, 0);
-        c.fillText("▲", 15,0);
-        c.fillText("▲", 30,0);
-        c.restore();
-        
+        c.moveTo(i*cellsize, j*cellsize + cellsize);
+        c.lineTo(i*cellsize + cellsize/4, j*cellsize);
+        c.lineTo(i*cellsize + cellsize/2, j*cellsize + cellsize);
+        c.lineTo(i*cellsize + cellsize/4*3, j*cellsize);
+        c.lineTo(i*cellsize + cellsize, j*cellsize + cellsize);
+        c.fill();
       }
     }
   }
   
-  // Apply speed to pos
-  y += vy;
-  
-  // Set grounded 
-  
-  grounded = 0;
-  
-  // Hit screen bottom
-  if(y + h > gridsize){
-    y = gridsize - h
-    vy = 0;
-    grounded = 1;
-    //console.log(1);
+  if(askshift){
+    if(!shifted && (get(x,y+h) == 1 && get(x+w-.1,y+h) == 1)){
+      shiftframe = 20;
+      shifted = 1;
+    }
   }
   
-  // Hit solid cell bottom
-  //console.log(x, y, get(x,y+h));
-  if(vy > 0 && (get(x,y+h) == 1 || get(x+w-.1,y+h) == 1)){
-    grounded = 1;
-    vy = 0;
-    y = Math.ceil(y) - h;
-    //console.log(1);
-    //canjumpagain = 1;
-  }
+  else {
   
-  // ceil
-  if(vy < 0 && (get(x,y) == 1 || get(x+w-.1,y) == 1)){
-    vy = 0;
-    y = Math.ceil(y);
-  }
-  
-  
-  
-  // Gravity (fall)
-  if(!grounded){//get(x, y + legs + 10) == 0){ 
-    //grounded = false;
-    vy += gravity;
-  }
-  
-  // Hit ceiling
-  if(y < 0){
-    y = 0;
-    vy = 0;
-  }
-
-  
-
-
-  //console.log(canjumpagain, u, grounded);
-  
-  // Start jump
-  if(u && grounded && canjumpagain){
-    vy = jump;
+    // Apply speed to pos
+    y += vy;
+    
+    // Set grounded 
+    
     grounded = 0;
-    canjumpagain = 0;
-    //console.log(grounded);
-  }
-  
-  // Press left
-  if(l){
-    x -= vx;
-  }
+    
+    // Hit screen bottom
+    if(y + h > gridsize){
+      y = gridsize - h;
+      vy = 0;
+      grounded = 1;
+      //console.log(1);
+    }
+    
+    // Hit solid cell bottom
+    //console.log(x, y, get(x,y+h));
+    if(vy > 0 && (get(x-w/2,y) == 1 || get(x+w/2-.1,y) == 1)){
+      grounded = 1;
+      vy = 0;
+      y = Math.floor(y);
+      //console.log(1);
+      //canjumpagain = 1;
+    }
+    
+    // ceil
+    if(vy < 0 && (get(x,y) == 1 || get(x+w-.1,y) == 1)){
+      vy = 0;
+      y = Math.ceil(y);
+    }
+    
+    
+    
+    // Gravity (fall)
+    if(!grounded){//get(x, y + legs + 10) == 0){ 
+      //grounded = false;
+      vy += gravity;
+    }
+    
+    // Hit ceiling
+    if(y < 0){
+      y = 0;
+      vy = 0;
+    }
 
-  // Press right
-  if(r){
-    x += vx;
-  }
-
-
-  // Check spikes
-  if(get(x,y) == 2 || get(x,y+h-.1) == 2 || get(x+w,y) == 2 || get(x+w,y+h-.1) == 2){
-    dead = 1;
-    //alert("dead");
-  }
-  
-  
-  // Check collisions
-  
-  
-  
-  // left
-  if(x < 0){
-    x = 0;
-  }
-  if(x > (gridsize - w)){
-    x = gridsize - w;
-  }
-  if(l && (get(x,y) == 1 || get(x,y+h-.1) == 1)){
-    x=Math.ceil(x);
-  }
-  // right
-  if(r && (get(x+w,y) == 1 || get(x+w,y+h-.1) == 1)){
-    x = Math.floor(x+w) - w;
-  }
-  
-  
-  
-  
-  // Draw hero
-  c.fillStyle="#468";
-  c.fillRect(x*cellsize,y*cellsize, w*cellsize, h*cellsize);
-  //c.font="60px a";
-  //c.save();
-  //c.translate(x, y);
-  //c.scale(-1,1);
-  //c.fillText("🏃\ufe0e", 0, 0);
-  //c.restore(); 
+    
 
 
-  //console.log(y);
+    //console.log(canjumpagain, u, grounded);
+    
+    // Start jump
+    if(u && grounded && canjumpagain){
+      vy = jump;
+      grounded = 0;
+      canjumpagain = 0;
+      //console.log(grounded);
+    }
+    
+    // Press left
+    if(l){
+      x -= vx;
+    }
+
+    // Press right
+    if(r){
+      x += vx;
+    }
+
+
+    // Check spikes
+    if(get(x,y) == 2 || get(x,y+h-.1) == 2 || get(x+w,y) == 2 || get(x+w,y+h-.1) == 2){
+      dead = 1;
+      //alert("dead");
+    }
+    
+    
+    // Check collisions
+    
+    
+    
+    // left
+    if(x < 0){
+      x = 0;
+    }
+    if(x > (gridsize - w)){
+      x = gridsize - w;
+    }
+    if(l && (get(x,y) == 1 || get(x,y+h-.1) == 1)){
+      x=Math.ceil(x);
+    }
+    // right
+    if(r && (get(x+w,y) == 1 || get(x+w,y+h-.1) == 1)){
+      x = Math.floor(x+w) - w;
+    }
+    
+    
+    
+    
+    // Draw hero
+    c.fillStyle="#468";
+    c.save();
+    c.translate(x*cellsize+w/2,y*cellsize+h);
+    c.scale(1, heroscale);
+    c.fillRect(0,0, w*cellsize, -h*cellsize);
+    c.restore();
+    
+    //c.font="60px a";
+    //c.save();
+    //c.translate(x, y);
+    //c.scale(-1,1);
+    //c.fillText("🏃\ufe0e", 0, 0);
+    //c.restore(); 
+
+
+    //console.log(y);
+  }
+  
+  // Shift animation
+  if(shiftframe) {
+    shiftframe--;
+    if(shiftframe >= 10){
+      heroscale = -((15 - shiftframe) / 5);
+      
+    }
+  }
+  
+  
+  askshift = 0;
+  
+  console.log(x, y);
   
 },33);
 
