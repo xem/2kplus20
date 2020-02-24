@@ -10,15 +10,17 @@ gridsize = 11;
 w = .6;
 h = .8;
 
-x = 0;
-y = 0;
+// hero's position
+x = 0; // left hero's box
+y = 0; // top of hero's box
 
-vx = .1;
+speed_x = 0.1;
+vx = 0;
 vy = 0;
 
 gravity = .04;
 jump = -.3;
-canjumpagain = 1;
+vymax = 1;
 
 grounded = 0;
 dead = 0;
@@ -28,13 +30,12 @@ shifted = 0; // 1 == black background + reverse gravity
 shiftframe = 0;
 
 heroscale = 1;
-
+padding = 0.01;
 c=canvas.getContext("2d");
-
+canjumpagain = 0;
 // Keyboard
 E=R=T=_=s=e=u=d=l=r=0;
 onkeydown=onkeyup=z=>{
-  //console.log(z.type);
   
   top['lurdlRdTl*urEu*_e**s'[(z.which+3)%20]]=z.type[3]<'u';
   if(!u) canjumpagain = 1;
@@ -49,8 +50,8 @@ m="00000000000\
 00000000000\
 00000000000\
 00000000000\
-00000000000\
-00000000000\
+01000000000\
+00100000000\
 11101110111\
 11101110111\
 11101110111\
@@ -102,111 +103,100 @@ setInterval(()=>{
   }
   
   else {
+    //console.log(canjumpagain);
   
     // Apply speed to pos
+    if(r){
+      vx = speed_x;
+    }
+    else if(l){
+      vx =-speed_x;
+    }
+    else{
+      vx=0;
+    }
+    if(grounded && u && canjumpagain){  // jump
+      canjumpagain = 1 - canjumpagain;
+      vy = jump;
+    }
+    if(1-grounded){   // fall
+      vy += gravity;
+      vy = Math.min(vy, vymax);
+    }
     y += vy;
+    x += vx;
     
-    // Set grounded 
-    
-    grounded = 0;
-    
+    // Check collisions:
+    // - Hit screen: left, right, down or up
+    // - Hit Box when going left, right, down or up
+
     // Hit screen bottom
     if(y + h > gridsize){
+      //console.log("hit screen bottom");
       y = gridsize - h;
       vy = 0;
-      grounded = 1;
-      //console.log(1);
     }
-    
-    // Hit solid cell bottom
-    //console.log(x, y, get(x,y+h));
-    if(vy > 0 && (get(x-w/2,y) == 1 || get(x+w/2-.1,y) == 1)){
-      grounded = 1;
-      vy = 0;
-      y = Math.floor(y);
-      //console.log(1);
-      //canjumpagain = 1;
-    }
-    
-    // ceil
-    if(vy < 0 && (get(x,y) == 1 || get(x+w-.1,y) == 1)){
-      vy = 0;
-      y = Math.ceil(y);
-    }
-    
-    
-    
-    // Gravity (fall)
-    if(!grounded){//get(x, y + legs + 10) == 0){ 
-      //grounded = false;
-      vy += gravity;
-    }
-    
-    // Hit ceiling
-    if(y < 0){
+    // Hit screen ceiling
+    if(y<0){
+      console.log("hit screen ceiling");
       y = 0;
       vy = 0;
     }
-
-    
-
-
-    //console.log(canjumpagain, u, grounded);
-    
-    // Start jump
-    if(u && grounded && canjumpagain){
-      vy = jump;
-      grounded = 0;
-      canjumpagain = 0;
-      //console.log(grounded);
+    // Hit screen left
+    if(x<0){
+      console.log("hit screen left");
+      x=0;
+    }
+    // Hit screen right
+    if(x + w >gridsize){
+      console.log("hit screen right");
+      x = gridsize - w;
     }
     
-    // Press left
-    if(l){
-      x -= vx;
+    // Hit Box up
+    if((get(x,y) == 1 && get(x + padding,y) == 1)  || (get(x+w,y) == 1 && get(x+w - padding,y) == 1)){
+      console.log("hit box up");
+      vy=0;
+      y = Math.ceil(y);
     }
 
-    // Press right
-    if(r){
-      x += vx;
+    // Hit Box down
+    if((vy >= 0) && ((get(x,y + h) == 1 && get(x+padding,y + h) == 1) || (get(x + w, y + h) == 1 && get(x + w - padding, y + h) == 1))){
+      console.log("hit box down");
+      vy = 0;
+      y = Math.floor(y + h) - h;
     }
 
+    // Hit box Left
+    if((get(x, y) == 1 && get(x, y+padding) == 1) || (get(x, y+h) == 1 && get(x, y+h - padding) == 1)){
+      console.log("hit box left");
+      x = Math.ceil(x);
+    }
+
+    // Hit box right
+    if((get(x+w,y) == 1 && get(x+w,y+padding) == 1) || (get(x+w, y+h) == 1 && get(x+w, y+h - padding) == 1)){
+     console.log("hit box right");
+      x = Math.floor(x + w) - w;
+    }
 
     // Check spikes
     if(get(x,y) == 2 || get(x,y+h-.1) == 2 || get(x+w,y) == 2 || get(x+w,y+h-.1) == 2){
       dead = 1;
-      //alert("dead");
     }
     
-    
-    // Check collisions
-    
-    
-    
-    // left
-    if(x < 0){
-      x = 0;
+    // Test grounded
+    if((get(x, y+h) == 1 && get(x + padding, y+h) == 1) || (get(x+w - padding, y+h) == 1 && get(x+w, y+h) == 1)){
+      grounded = 1;
     }
-    if(x > (gridsize - w)){
-      x = gridsize - w;
-    }
-    if(l && (get(x,y) == 1 || get(x,y+h-.1) == 1)){
-      x=Math.ceil(x);
-    }
-    // right
-    if(r && (get(x+w,y) == 1 || get(x+w,y+h-.1) == 1)){
-      x = Math.floor(x+w) - w;
-    }
-    
-    
-    
+    else{
+      grounded = 0;
+    }   
     
     // Draw hero
     c.fillStyle="#468";
     c.save();
-    c.translate(x*cellsize+w/2,y*cellsize+h);
-    c.scale(1, heroscale);
-    c.fillRect(0,0, w*cellsize, -h*cellsize);
+//    c.scale(1, heroscale);
+    c.fillRect(x*cellsize,y*cellsize,w*cellsize, h*cellsize);
     c.restore();
     
     //c.font="60px a";
@@ -216,8 +206,6 @@ setInterval(()=>{
     //c.fillText("🏃\ufe0e", 0, 0);
     //c.restore(); 
 
-
-    //console.log(y);
   }
   
   // Shift animation
@@ -231,8 +219,7 @@ setInterval(()=>{
   
   
   askshift = 0;
-  
-  console.log(x, y);
+
   
 },33);
 
