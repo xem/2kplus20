@@ -1,5 +1,6 @@
 ﻿<center>
-<canvas id=canvas width=704 height=704 style="border:9px solid">
+<canvas id=canvas width=704 height=704 style="border:9px solid; background:#aaa">
+<script src=levels.js></script>
 <script>
 
 // Global vars
@@ -11,28 +12,31 @@ w = .6;
 h = .8;
 
 // hero's position
-x = 0; // left hero's box
-y = 0; // top of hero's box
+//x = 0; // left hero's box
+//y = 0; // top of hero's box
 
-speed_x = 0.1;
-vx = 0;
-vy = 0;
+speed_x = 0.14;
+//vx = 0;
+//vy = 0;
 
-gravity = .04;
+gravity = .045;
 jump = -.3;
 vymax = 1;
 
-grounded = 0;
-dead = 0;
-won = 0;
-askshift = 0;
-shifted = 0; // 1 == black background + reverse gravity
-shiftframe = 0;
+//grounded = 0;
+//dead = 0;
+//won = 0;
+//askshift = 0;
+//shifted = 0; // 1 == black background + reverse gravity
+//shiftframe = 0;
 
 heroscale = 1;
 padding = speed_x + 0.01;
 c=canvas.getContext("2d");
 canjumpagain = 0;
+
+currentlevel = 0;
+
 // Keyboard
 E=R=T=_=s=e=u=d=l=r=0;
 onkeydown=onkeyup=z=>{
@@ -45,19 +49,6 @@ onkeydown=onkeyup=z=>{
   }
 }
 
-// Map
-m="00000000000\
-00000000000\
-00000000000\
-00000000000\
-00000000000\
-00110000000\
-11101110111\
-11101110111\
-11101110111\
-11101110111\
-11121112111";
-
 // Get cell value at x:y
 get = (x, y) => {
   X = Math.floor(x);
@@ -65,32 +56,62 @@ get = (x, y) => {
   return parseInt(m[Y * gridsize + X]);
 }
 
+// Load a level
+load = n => {
+  dead = 0;
+  x = levels[currentlevel].start[0];
+  y = levels[currentlevel].start[1];
+  vx = 0;
+  vy = 0;
+  grounded = 0;
+  askshift = 0;
+  shifted = 0;
+  shiftframe = 0;
+  wonframe=0;
+  m=levels[currentlevel].map;
+}
+
+load(0);
+
 // Game loop
 setInterval(()=>{
+
+  console.log("===");
 
   // Reset
   canvas.width = canvas.width;
 
   // Draw map
-  for(i=0;i<gridsize;i++){
-    for(j=0;j<gridsize;j++){
-      a=(m[j*gridsize+i]);
-      if(a == 1){
-        c.fillRect(i*cellsize,j*cellsize,cellsize,cellsize);
-      }
-      else if(a==9){
-        c.fillRect(i*cellsize,j*cellsize+30,50,70);
-        c.fillStyle="#fff";
-        c.fillRect(i*cellsize+2,j*cellsize+2+30,40,60);
-        c.fillStyle="#000";
-      }
-      else if(a==2){
-        c.moveTo(i*cellsize, j*cellsize + cellsize);
-        c.lineTo(i*cellsize + cellsize/4, j*cellsize);
-        c.lineTo(i*cellsize + cellsize/2, j*cellsize + cellsize);
-        c.lineTo(i*cellsize + cellsize/4*3, j*cellsize);
-        c.lineTo(i*cellsize + cellsize, j*cellsize + cellsize);
-        c.fill();
+  if(wonframe > 10 || wonframe == 0){
+    for(i=0;i<gridsize;i++){
+      for(j=0;j<gridsize;j++){
+        a=(m[j*gridsize+i]);
+        
+        // Black cell
+        if(a == 1){
+          c.fillRect(i*cellsize,j*cellsize,cellsize,cellsize);
+        }
+        
+        // Spike
+        else if(a==2){
+          c.moveTo(i*cellsize, j*cellsize + cellsize);
+          c.lineTo(i*cellsize + cellsize/4, j*cellsize);
+          c.lineTo(i*cellsize + cellsize/2, j*cellsize + cellsize);
+          c.lineTo(i*cellsize + cellsize/4*3, j*cellsize);
+          c.lineTo(i*cellsize + cellsize, j*cellsize + cellsize);
+          c.fill();
+        }
+        
+        // Door on white cell
+        else if(a==3){
+        
+          c.fillRect(i*cellsize+14,j*cellsize+4,44,60);
+          
+          c.fillStyle="#fff";
+          c.fillRect(i*cellsize+16,j*cellsize+10,34,52);
+          
+          c.fillStyle="#000";
+        }
       }
     }
   }
@@ -102,22 +123,21 @@ setInterval(()=>{
     }
   }
   
+  else if(wonframe){
+    wonframe--;
+    if(wonframe == 1){
+      load(++currentlevel);
+    }
+  }
+  
   else {
     //console.log(canjumpagain);
+    
     if(dead){
-      alert("dead !");
-      dead = 0;
-      x = 0;
-      y = 0;
-      vx = 0;
-      vy = 0;
-
-      grounded = 0;
-      won = 0;
-      askshift = 0;
-      shifted = 0; // 1 == black background + reverse gravity
-      shiftframe = 0;
+      //alert("dead !");
+      load(currentlevel);
     }
+    
     // Apply speed to pos
     if(r){
       vx = speed_x;
@@ -205,12 +225,20 @@ setInterval(()=>{
       grounded = 0;
     }   
     
-    // Draw hero
-    c.fillStyle="#468";
-    c.save();
-//    c.scale(1, heroscale);
-    c.fillRect(x*cellsize,y*cellsize,w*cellsize, h*cellsize);
-    c.restore();
+    // Test door
+    if(grounded && get(x,y) == 3 && get(x+w,y) == 3){
+      wonframe = 30;
+    }
+    
+  }
+    
+  // Draw hero
+  c.fillStyle="#468";
+  c.save();
+  c.translate(x*cellsize+w*cellsize/2,y*cellsize+h*cellsize);
+  c.scale(1, heroscale);
+  c.fillRect(-w*cellsize/2,0, w*cellsize, -h*cellsize);
+  c.restore();
     
     //c.font="60px a";
     //c.save();
@@ -219,8 +247,7 @@ setInterval(()=>{
     //c.fillText("🏃\ufe0e", 0, 0);
     //c.restore(); 
 
-  }
-  
+
   // Shift animation
   if(shiftframe) {
     shiftframe--;
@@ -228,6 +255,12 @@ setInterval(()=>{
       heroscale = -((15 - shiftframe) / 5);
       
     }
+  }
+  
+  // Won transition
+  if(wonframe && wonframe < 10){
+    c.fillStyle = "#000";
+    c.fillRect(0,0,704,704);
   }
   
   
