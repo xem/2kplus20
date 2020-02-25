@@ -104,7 +104,20 @@ setInterval(()=>{
   
   else {
     //console.log(canjumpagain);
-  
+    if(dead){
+      alert("dead !");
+      dead = 0;
+      x = 0;
+      y = 0;
+      vx = 0;
+      vy = 0;
+
+      grounded = 0;
+      won = 0;
+      askshift = 0;
+      shifted = 0; // 1 == black background + reverse gravity
+      shiftframe = 0;
+    }
     // Apply speed to pos
     if(r){
       vx = speed_x;
