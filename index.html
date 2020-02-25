@@ -1,5 +1,5 @@
 ﻿<center>
-<canvas id=canvas width=704 height=704 style="border:9px solid; background:#aaa">
+<canvas id=canvas width=704 height=704 style="border:9px solid; background:#ddd">
 <script src=levels.js></script>
 <script>
 
@@ -43,10 +43,10 @@ onkeydown=onkeyup=z=>{
   
   top['lurdlRdTl*urEu*_e**s'[(z.which+3)%20]]=z.type[3]<'u';
   if(!u) canjumpagain = 1;
-  if(s){
-    askshift = 1;
-    //shiftframe = 10;
-  }
+  <!-- if(s){ -->
+    <!-- askshift = 1; -->
+    <!-- //shiftframe = 10; -->
+  <!-- } -->
 }
 
 // Get cell value at x:y
@@ -64,11 +64,13 @@ load = n => {
   vx = 0;
   vy = 0;
   grounded = 0;
-  askshift = 0;
+  <!-- askshift = 0; -->
   shifted = 0;
   shiftframe = 0;
+  heroscale = 1;
   wonframe=0;
   m=levels[currentlevel].map;
+  canvas.style.transform = "";
 }
 
 load(0);
@@ -76,11 +78,25 @@ load(0);
 // Game loop
 setInterval(()=>{
 
-  console.log("===");
+  //console.log("===");
 
   // Reset
   canvas.width = canvas.width;
-
+  
+  c.save();
+  //c.translate(352, 352);
+  if(shiftframe>0 && shiftframe<10){
+    canvas.style.transform = "rotate(" + ((10 - shiftframe) * 3.14/9) + "rad)";
+    if(shiftframe==1){
+      m=m.split("").reverse().join("").replace(/0/g, "A").replace(/1/g, 0).replace(/A/g,1).replace(/3/g, "A").replace(/4/g, 3).replace(/A/g,4);
+      canvas.style.transform = "";
+      x = 11 - x;
+      y = 11 - y;
+      y--;
+      shifted=1;
+      heroscale = 1;
+    }
+  }
   // Draw map
   if(wonframe > 10 || wonframe == 0){
     for(i=0;i<gridsize;i++){
@@ -88,7 +104,7 @@ setInterval(()=>{
         a=(m[j*gridsize+i]);
         
         // Black cell
-        if(a == 1){
+        if((!shifted && a==1)||(shifted && a==0)){
           c.fillRect(i*cellsize,j*cellsize,cellsize,cellsize);
         }
         
@@ -103,8 +119,9 @@ setInterval(()=>{
         }
         
         // Door on white cell
-        else if(a==3){
+        else if((!shifted && a==3)||(shifted && a==4)){
         
+          c.fillStyle="#888";
           c.fillRect(i*cellsize+14,j*cellsize+4,44,60);
           
           c.fillStyle="#fff";
@@ -112,14 +129,43 @@ setInterval(()=>{
           
           c.fillStyle="#000";
         }
+             // Door on black cell
+        else if((!shifted && a==4)||(shifted && a==3)){
+          c.fillRect(i*cellsize,j*cellsize,cellsize,cellsize);
+          c.fillStyle="#888";
+          c.fillRect(i*cellsize+10,j*cellsize,44,60);
+          
+          c.fillStyle="#fff";
+          c.fillRect(i*cellsize+17,j*cellsize+2,34,52);
+          
+          c.fillStyle = "#000";
+          
+          
+        }
       }
+    }
+    
+    if(levels[currentlevel].msg){
+      c.font = '20px "Comic Sans MS", cursive, sans-serif';
+      c.fillStyle = levels[currentlevel].msg[3];
+      c.save();
+      if(levels[currentlevel].msg[3] == "#fff"){
+        c.translate(350,350);
+        c.rotate(3.14);
+      }
+      c.fillText(levels[currentlevel].msg[0],levels[currentlevel].msg[1],levels[currentlevel].msg[2]);
+      c.restore();
     }
   }
   
-  if(askshift){
-    if(!shifted && (get(x,y+h) == 1 && get(x+w-.1,y+h) == 1)){
+  if(s){
+    if(!shifted && (get(x,y+h) == 1 && get(x+w,y+h) == 1)){
       shiftframe = 20;
-      shifted = 1;
+      //shifted = 1;
+    }
+    else if(shifted && (get(x,y+h) == 0 && get(x+w,y+h) == 0)){
+      shiftframe = 20;
+      //shifted = 0;
     }
   }
   
@@ -171,18 +217,18 @@ setInterval(()=>{
     }
     // Hit screen ceiling
     if(y<0){
-      console.log("hit screen ceiling");
+      //console.log("hit screen ceiling");
       y = 0;
       vy = 0;
     }
     // Hit screen left
     if(x<0){
-      console.log("hit screen left");
+      //console.log("hit screen left");
       x=0;
     }
     // Hit screen right
     if(x + w >gridsize){
-      console.log("hit screen right");
+      //console.log("hit screen right");
       x = gridsize - w;
     }
     

@@ -19,7 +19,7 @@ map:
 00000000000\
 00000000000\
 00000000000\
-00000000030\
+00000004030\
 11111111111\
 11111111111\
 11111111111\
@@ -27,6 +27,8 @@ map:
 11111111111',
 
 start: [1,5],
+
+msg: ["RUN WITH ARROW KEYS, TOUCH THE DOOR TO CONTINUE", 50, 150, "#000"],
 
 },
 
@@ -50,6 +52,8 @@ map:
 11121112111',
 
 start: [1,5],
+
+msg: ["JUMP WITH UP KEY", 250, 50, "#000"],
 
 },
 
@@ -82,6 +86,8 @@ keys: [
   }
 ],
 
+msg: ["GRAB THE KEY TO MOVE THE PLATFORM", 150, 50, "#000"],
+
 },
 
 // 3: shift
@@ -103,6 +109,8 @@ map:
 11111111111',
 
 start: [1,6],
+
+msg: ["PRESS SHIFT FOR A SURPRISE", -100, -320, "#fff"],
 
 },
 
