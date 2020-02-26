@@ -11,10 +11,10 @@ gridsize = 11;
 w = .6;
 h = .8;
 
-speed_x = 0.16;
+speed_x = 0.19;
 
 gravity = .045;
-jump = -.3;
+jump = -.32;
 vymax = 1;
 
 heroscale = 1;
@@ -30,6 +30,7 @@ onkeydown=onkeyup=z=>{
   
   top['lurdlRdTl*urEu*_e**s'[(z.which+3)%20]]=z.type[3]<'u';
   if(!u) canjumpagain = 1;
+  if(_) load(currentlevel);
 }
 
 // Get cell value at x:y
@@ -43,24 +44,52 @@ get = (x, y) => {
 isSolid = (x,y) => {
   if(get(x,y)==1) return 1;
   if(get(x,y) == 4) return 1;
-  //if(y == 11 - h) return 1;
   if(levels[currentlevel].keys){
     for(i in levels[currentlevel].keys){
       if(levels[currentlevel].keys[i].taken){
         for(j in levels[currentlevel].keys[i].on){
-          if(Math.floor(x) == levels[currentlevel].keys[i].on[j][0] && Math.floor(y) == levels[currentlevel].keys[i].on[j][1]){
-           return 1;
+          if(!shifted){
+            if(
+              Math.floor(x) == levels[currentlevel].keys[i].on[j][0]
+              && 
+              Math.floor(y) == levels[currentlevel].keys[i].on[j][1]
+            ){
+             return 1;
+            }
+          }
+          else {
+            if(
+              Math.floor(x) == 10-levels[currentlevel].keys[i].on[j][0]
+              && 
+              Math.floor(y) == 10-levels[currentlevel].keys[i].on[j][1]
+            ){
+             return 1;
+            }
           }
         }
-      
       }
       
       else{
         for(j in levels[currentlevel].keys[i].off){
-            if(Math.floor(x) == levels[currentlevel].keys[i].off[j][0] && Math.floor(y) == levels[currentlevel].keys[i].off[j][1]){
+          if(!shifted){
+            if(
+              Math.floor(x) == levels[currentlevel].keys[i].off[j][0]
+              &&
+              Math.floor(y) == levels[currentlevel].keys[i].off[j][1]              
+            ){
              return 1;
             }
           }
+          else {
+            if(
+              Math.floor(x) == 10-levels[currentlevel].keys[i].off[j][0]
+              &&
+              Math.floor(y) == 10-levels[currentlevel].keys[i].off[j][1]
+            ){
+             return 1;
+            }
+          }
+        }
       
       }
     }
@@ -68,10 +97,17 @@ isSolid = (x,y) => {
   return 0;
 }
 
+// Check if cell at x:y is shiftable
+isShiftable = (x,y) => {
+  if(get(x,y)==1) return 1;
+  if(get(x,y) == 4) return 1;
+  return 0;
+}
+
 // Load a level
 load = n => {
   dead = 0;
-  x = levels[currentlevel].start[0];
+  x = levels[currentlevel].start[0]+.3;
   y = levels[currentlevel].start[1];
   vx = 0;
   vy = 0;
@@ -103,13 +139,13 @@ setInterval(()=>{
     if(shiftframe==1){
       m=m.split("").reverse().join("").replace(/0/g, "A").replace(/1/g, 0).replace(/A/g,1).replace(/3/g, "A").replace(/4/g, 3).replace(/A/g,4);
       canvas.style.transform = "";
-      x = 11 - x;
-      y = 11 - y;
-      y--;
+      x = 10 - x + .3;
+      y = 10 - y;
       shifted = 1 - shifted;
       heroscale = 1;
     }
   }
+  
   // Draw map
   if(wonframe > 10 || wonframe == 0){
     for(i=0;i<gridsize;i++){
@@ -167,28 +203,46 @@ setInterval(()=>{
       }
     }
     
+    // Draw keys and platforms
     if(levels[currentlevel].keys){
       c.fillStyle = "#aaa";
       for(i in levels[currentlevel].keys){
-      console.log(levels[currentlevel].keys[i].taken);
+      //console.log(levels[currentlevel].keys[i].taken);
+      
+        // Draw key
         if(!levels[currentlevel].keys[i].taken){
-            c.beginPath();
-            c.arc(levels[currentlevel].keys[i].key[0] * cellsize  + cellsize/ 2, levels[currentlevel].keys[i].key[1] * cellsize + cellsize / 2, cellsize / 4, 0, 6.29);
-            c.fill();
-            c.closePath();
+          c.beginPath();
+          if(!shifted){
+            c.arc(levels[currentlevel].keys[i].key[0] * cellsize + cellsize/ 2, levels[currentlevel].keys[i].key[1] * cellsize + cellsize / 2, cellsize / 4, 0, 6.29);
+          }
+          else {
+            c.arc((10-levels[currentlevel].keys[i].key[0]) * cellsize + cellsize/ 2, (10-levels[currentlevel].keys[i].key[1]) * cellsize + cellsize / 2, cellsize / 4, 0, 6.29);
+          }
+          c.fill();
+          c.closePath();
             
-            // draw platform mode on
-            for(j in levels[currentlevel].keys[i].off){
+          // draw platform mode on
+          for(j in levels[currentlevel].keys[i].off){
+            if(!shifted){
               c.fillRect(levels[currentlevel].keys[i].off[j][0] * cellsize, levels[currentlevel].keys[i].off[j][1] *cellsize, cellsize, cellsize);
             }
-           
+            else {
+              c.fillRect((10-levels[currentlevel].keys[i].off[j][0]) * cellsize, (10-levels[currentlevel].keys[i].off[j][1]) * cellsize, cellsize, cellsize);
+            }
           }
-          // draw platform mode off
+           
+        }
+       
+        // draw platform mode off
         else{
           for(j in levels[currentlevel].keys[i].on){
+            if(!shifted){
               c.fillRect(levels[currentlevel].keys[i].on[j][0] * cellsize, levels[currentlevel].keys[i].on[j][1] * cellsize, cellsize, cellsize);
             }
-        
+            else {
+              c.fillRect((10-levels[currentlevel].keys[i].on[j][0]) * cellsize, (10-levels[currentlevel].keys[i].on[j][1]) * cellsize, cellsize, cellsize);
+            }
+          }
         }
       }
     }
@@ -210,10 +264,7 @@ setInterval(()=>{
   
   // Press shift
   if(s){
-    if(!shifted && (isSolid(x,y+h) && isSolid(x+w,y+h))){
-      shiftframe = 20;
-    }
-    else if(shifted && (isSolid(x,y+h) && isSolid(x+w,y+h))){
+    if(shiftframe == 0 && isShiftable(x,y+h) && isShiftable(x+w-.1,y+h)){
       shiftframe = 20;
     }
   }
@@ -233,10 +284,10 @@ setInterval(()=>{
     }
     
     // Apply speed to pos
-    if(r){
+    if(r && !shiftframe){
       vx = speed_x;
     }
-    else if(l){
+    else if(l && !shiftframe){
       vx =-speed_x;
     }
     else{
@@ -282,37 +333,37 @@ setInterval(()=>{
     
     // Hit Box up
     if((isSolid(x,y) && isSolid(x + padding,y))  || (isSolid(x+w,y) && isSolid(x+w - padding,y))){
-      console.log("hit box up");
+      //console.log("hit box up");
       vy=0;
       y = Math.ceil(y);
     }
 
     // Hit Box down
     if((vy >= 0) && ((isSolid(x,y + h) && isSolid(x+padding,y + h)) || (isSolid(x + w, y + h) && isSolid(x + w - padding, y + h)))){
-      console.log("hit box down");
+      //console.log("hit box down");
       vy = 0;
       y = Math.floor(y + h) - h;
     }
 
     // Hit box Left
     if((isSolid(x, y) && isSolid(x, y+padding)) || (isSolid(x, y+h) && isSolid(x, y+h - padding))){
-      console.log("hit box left");
+      //console.log("hit box left");
       x = Math.ceil(x);
     }
 
     // Hit box right
     if((isSolid(x+w,y) && isSolid(x+w,y+padding)) || (isSolid(x+w, y+h) && isSolid(x+w, y+h - padding))){
-     console.log("hit box right");
+     //console.log("hit box right");
       x = Math.floor(x + w) - w;
     }
 
     // Check spikes
-    if(get(x,y) == 2 || get(x,y+h-.1) == 2 || get(x+w,y) == 2 || get(x+w,y+h-.1) == 2){
+    if(get(x+.3,y+.3) == 2 || get(x+.3,y+h-.3) == 2 || get(x+w-.3,y+.3) == 2 || get(x+w-.3,y+h-.3) == 2){
       dead = 1;
     }
     
     // Test grounded
-    if((isSolid(x, y+h) && isSolid(x + padding, y+h)) || (isSolid(x+w - padding, y+h) && isSolid(x+w, y+h))){
+    if(y == gridsize - h || (isSolid(x, y+h) && isSolid(x + padding, y+h)) || (isSolid(x+w - padding, y+h) && isSolid(x+w, y+h))){
       grounded = 1;
     }
     else{
@@ -324,9 +375,30 @@ setInterval(()=>{
       wonframe = 30;
     }
     
+    
+    // Grab key
     for(i in levels[currentlevel].keys){
-      if(!levels[currentlevel].keys[i].taken && Math.floor(x) >= levels[currentlevel].keys[i].key[0] && Math.floor(x) < levels[currentlevel].keys[i].key[0] + 1 && Math.floor(y) >= levels[currentlevel].keys[i].key[1] && Math.floor(y) < levels[currentlevel].keys[i].key[1] + 1){
-        levels[currentlevel].keys[i].taken = 1;
+      if(!shifted){
+        if(
+          !levels[currentlevel].keys[i].taken
+          && Math.floor(x) >= levels[currentlevel].keys[i].key[0]
+          && Math.floor(x) < levels[currentlevel].keys[i].key[0] + 1
+          && Math.floor(y) >= levels[currentlevel].keys[i].key[1]
+          && Math.floor(y) < levels[currentlevel].keys[i].key[1] + 1
+        ){
+          levels[currentlevel].keys[i].taken = 1;
+        }
+      }
+      else {
+        if(
+          !levels[currentlevel].keys[i].taken
+          && Math.floor(x) >= 10-levels[currentlevel].keys[i].key[0]
+          && Math.floor(x) < 10-levels[currentlevel].keys[i].key[0] + 1
+          && Math.floor(y) >= 10-levels[currentlevel].keys[i].key[1]
+          && Math.floor(y) < 10-levels[currentlevel].keys[i].key[1] + 1
+        ){
+          levels[currentlevel].keys[i].taken = 1;
+        }
       }
     }
   }
