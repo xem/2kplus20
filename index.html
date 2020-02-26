@@ -11,31 +11,18 @@ gridsize = 11;
 w = .6;
 h = .8;
 
-// hero's position
-//x = 0; // left hero's box
-//y = 0; // top of hero's box
-
-speed_x = 0.14;
-//vx = 0;
-//vy = 0;
+speed_x = 0.16;
 
 gravity = .045;
 jump = -.3;
 vymax = 1;
-
-//grounded = 0;
-//dead = 0;
-//won = 0;
-//askshift = 0;
-//shifted = 0; // 1 == black background + reverse gravity
-//shiftframe = 0;
 
 heroscale = 1;
 padding = speed_x + 0.01;
 c=canvas.getContext("2d");
 canjumpagain = 0;
 
-currentlevel = 0;
+currentlevel = 6;
 
 // Keyboard
 E=R=T=_=s=e=u=d=l=r=0;
@@ -43,10 +30,6 @@ onkeydown=onkeyup=z=>{
   
   top['lurdlRdTl*urEu*_e**s'[(z.which+3)%20]]=z.type[3]<'u';
   if(!u) canjumpagain = 1;
-  <!-- if(s){ -->
-    <!-- askshift = 1; -->
-    <!-- //shiftframe = 10; -->
-  <!-- } -->
 }
 
 // Get cell value at x:y
@@ -54,6 +37,35 @@ get = (x, y) => {
   X = Math.floor(x);
   Y = Math.floor(y);
   return parseInt(m[Y * gridsize + X]);
+}
+
+// Check if cell at x:y is solid
+isSolid = (x,y) => {
+  if(get(x,y)==1) return 1;
+  if(get(x,y) == 4) return 1;
+  //if(y == 11 - h) return 1;
+  if(levels[currentlevel].keys){
+    for(i in levels[currentlevel].keys){
+      if(levels[currentlevel].keys[i].taken){
+        for(j in levels[currentlevel].keys[i].on){
+          if(Math.floor(x) == levels[currentlevel].keys[i].on[j][0] && Math.floor(y) == levels[currentlevel].keys[i].on[j][1]){
+           return 1;
+          }
+        }
+      
+      }
+      
+      else{
+        for(j in levels[currentlevel].keys[i].off){
+            if(Math.floor(x) == levels[currentlevel].keys[i].off[j][0] && Math.floor(y) == levels[currentlevel].keys[i].off[j][1]){
+             return 1;
+            }
+          }
+      
+      }
+    }
+  }
+  return 0;
 }
 
 // Load a level
@@ -64,13 +76,15 @@ load = n => {
   vx = 0;
   vy = 0;
   grounded = 0;
-  <!-- askshift = 0; -->
   shifted = 0;
   shiftframe = 0;
   heroscale = 1;
   wonframe=0;
   m=levels[currentlevel].map;
   canvas.style.transform = "";
+  for(i in levels[currentlevel].keys){
+    levels[currentlevel].keys[i].taken = 0;
+  }
 }
 
 load(0);
@@ -84,7 +98,6 @@ setInterval(()=>{
   canvas.width = canvas.width;
   
   c.save();
-  //c.translate(352, 352);
   if(shiftframe>0 && shiftframe<10){
     canvas.style.transform = "rotate(" + ((10 - shiftframe) * 3.14/9) + "rad)";
     if(shiftframe==1){
@@ -93,7 +106,7 @@ setInterval(()=>{
       x = 11 - x;
       y = 11 - y;
       y--;
-      shifted=1;
+      shifted = 1 - shifted;
       heroscale = 1;
     }
   }
@@ -108,8 +121,8 @@ setInterval(()=>{
           c.fillRect(i*cellsize,j*cellsize,cellsize,cellsize);
         }
         
-        // Spike
-        else if(a==2){
+        // Spike when not shifted
+        else if(a==2 && !shifted){
           c.moveTo(i*cellsize, j*cellsize + cellsize);
           c.lineTo(i*cellsize + cellsize/4, j*cellsize);
           c.lineTo(i*cellsize + cellsize/2, j*cellsize + cellsize);
@@ -117,26 +130,35 @@ setInterval(()=>{
           c.lineTo(i*cellsize + cellsize, j*cellsize + cellsize);
           c.fill();
         }
+        // Spike when shifted
+        else if(a==2 && shifted){
+          c.moveTo(i*cellsize, j*cellsize);
+          c.lineTo(i*cellsize + cellsize/4, j*cellsize + cellsize);
+          c.lineTo(i*cellsize + cellsize/2, j*cellsize);
+          c.lineTo(i*cellsize + cellsize/4*3, j*cellsize + cellsize);
+          c.lineTo(i*cellsize + cellsize, j*cellsize);
+          c.fill();
+        }
         
         // Door on white cell
         else if((!shifted && a==3)||(shifted && a==4)){
         
+          // Door
           c.fillStyle="#888";
-          c.fillRect(i*cellsize+14,j*cellsize+4,44,60);
-          
-          c.fillStyle="#fff";
-          c.fillRect(i*cellsize+16,j*cellsize+10,34,52);
+          c.fillRect(i*cellsize+10,j*cellsize + (shifted ? 0 : 10),44,54);
           
           c.fillStyle="#000";
         }
-             // Door on black cell
+        
+        // Door on black cell
         else if((!shifted && a==4)||(shifted && a==3)){
-          c.fillRect(i*cellsize,j*cellsize,cellsize,cellsize);
-          c.fillStyle="#888";
-          c.fillRect(i*cellsize+10,j*cellsize,44,60);
           
-          c.fillStyle="#fff";
-          c.fillRect(i*cellsize+17,j*cellsize+2,34,52);
+          // Black cell
+          c.fillRect(i*cellsize,j*cellsize,cellsize,cellsize);
+          
+          // Door
+          c.fillStyle="#888";
+          c.fillRect(i*cellsize+10,j*cellsize + (shifted ? 10 : 0),44,54);
           
           c.fillStyle = "#000";
           
@@ -145,27 +167,54 @@ setInterval(()=>{
       }
     }
     
+    if(levels[currentlevel].keys){
+      c.fillStyle = "#aaa";
+      for(i in levels[currentlevel].keys){
+      console.log(levels[currentlevel].keys[i].taken);
+        if(!levels[currentlevel].keys[i].taken){
+            c.beginPath();
+            c.arc(levels[currentlevel].keys[i].key[0] * cellsize  + cellsize/ 2, levels[currentlevel].keys[i].key[1] * cellsize + cellsize / 2, cellsize / 4, 0, 6.29);
+            c.fill();
+            c.closePath();
+            
+            // draw platform mode on
+            for(j in levels[currentlevel].keys[i].off){
+              c.fillRect(levels[currentlevel].keys[i].off[j][0] * cellsize, levels[currentlevel].keys[i].off[j][1] *cellsize, cellsize, cellsize);
+            }
+           
+          }
+          // draw platform mode off
+        else{
+          for(j in levels[currentlevel].keys[i].on){
+              c.fillRect(levels[currentlevel].keys[i].on[j][0] * cellsize, levels[currentlevel].keys[i].on[j][1] * cellsize, cellsize, cellsize);
+            }
+        
+        }
+      }
+    }
+    
+    // Text
     if(levels[currentlevel].msg){
       c.font = '20px "Comic Sans MS", cursive, sans-serif';
       c.fillStyle = levels[currentlevel].msg[3];
       c.save();
-      if(levels[currentlevel].msg[3] == "#fff"){
+      if(levels[currentlevel].msg[3] == "#fff" ^ shifted){
         c.translate(350,350);
         c.rotate(3.14);
+        c.translate(-350,-350);
       }
       c.fillText(levels[currentlevel].msg[0],levels[currentlevel].msg[1],levels[currentlevel].msg[2]);
       c.restore();
     }
   }
   
+  // Press shift
   if(s){
-    if(!shifted && (get(x,y+h) == 1 && get(x+w,y+h) == 1)){
+    if(!shifted && (isSolid(x,y+h) && isSolid(x+w,y+h))){
       shiftframe = 20;
-      //shifted = 1;
     }
-    else if(shifted && (get(x,y+h) == 0 && get(x+w,y+h) == 0)){
+    else if(shifted && (isSolid(x,y+h) && isSolid(x+w,y+h))){
       shiftframe = 20;
-      //shifted = 0;
     }
   }
   
@@ -180,7 +229,6 @@ setInterval(()=>{
     //console.log(canjumpagain);
     
     if(dead){
-      //alert("dead !");
       load(currentlevel);
     }
     
@@ -233,27 +281,27 @@ setInterval(()=>{
     }
     
     // Hit Box up
-    if((get(x,y) == 1 && get(x + padding,y) == 1)  || (get(x+w,y) == 1 && get(x+w - padding,y) == 1)){
+    if((isSolid(x,y) && isSolid(x + padding,y))  || (isSolid(x+w,y) && isSolid(x+w - padding,y))){
       console.log("hit box up");
       vy=0;
       y = Math.ceil(y);
     }
 
     // Hit Box down
-    if((vy >= 0) && ((get(x,y + h) == 1 && get(x+padding,y + h) == 1) || (get(x + w, y + h) == 1 && get(x + w - padding, y + h) == 1))){
+    if((vy >= 0) && ((isSolid(x,y + h) && isSolid(x+padding,y + h)) || (isSolid(x + w, y + h) && isSolid(x + w - padding, y + h)))){
       console.log("hit box down");
       vy = 0;
       y = Math.floor(y + h) - h;
     }
 
     // Hit box Left
-    if((get(x, y) == 1 && get(x, y+padding) == 1) || (get(x, y+h) == 1 && get(x, y+h - padding) == 1)){
+    if((isSolid(x, y) && isSolid(x, y+padding)) || (isSolid(x, y+h) && isSolid(x, y+h - padding))){
       console.log("hit box left");
       x = Math.ceil(x);
     }
 
     // Hit box right
-    if((get(x+w,y) == 1 && get(x+w,y+padding) == 1) || (get(x+w, y+h) == 1 && get(x+w, y+h - padding) == 1)){
+    if((isSolid(x+w,y) && isSolid(x+w,y+padding)) || (isSolid(x+w, y+h) && isSolid(x+w, y+h - padding))){
      console.log("hit box right");
       x = Math.floor(x + w) - w;
     }
@@ -264,7 +312,7 @@ setInterval(()=>{
     }
     
     // Test grounded
-    if((get(x, y+h) == 1 && get(x + padding, y+h) == 1) || (get(x+w - padding, y+h) == 1 && get(x+w, y+h) == 1)){
+    if((isSolid(x, y+h) && isSolid(x + padding, y+h)) || (isSolid(x+w - padding, y+h) && isSolid(x+w, y+h))){
       grounded = 1;
     }
     else{
@@ -276,6 +324,11 @@ setInterval(()=>{
       wonframe = 30;
     }
     
+    for(i in levels[currentlevel].keys){
+      if(!levels[currentlevel].keys[i].taken && Math.floor(x) >= levels[currentlevel].keys[i].key[0] && Math.floor(x) < levels[currentlevel].keys[i].key[0] + 1 && Math.floor(y) >= levels[currentlevel].keys[i].key[1] && Math.floor(y) < levels[currentlevel].keys[i].key[1] + 1){
+        levels[currentlevel].keys[i].taken = 1;
+      }
+    }
   }
     
   // Draw hero
@@ -286,13 +339,12 @@ setInterval(()=>{
   c.fillRect(-w*cellsize/2,0, w*cellsize, -h*cellsize);
   c.restore();
     
-    //c.font="60px a";
-    //c.save();
-    //c.translate(x, y);
-    //c.scale(-1,1);
-    //c.fillText("🏃\ufe0e", 0, 0);
-    //c.restore(); 
-
+  //c.font="60px a";
+  //c.save();
+  //c.translate(x, y);
+  //c.scale(-1,1);
+  //c.fillText("🏃\ufe0e", 0, 0);
+  //c.restore(); 
 
   // Shift animation
   if(shiftframe) {
@@ -309,9 +361,7 @@ setInterval(()=>{
     c.fillRect(0,0,704,704);
   }
   
-  
   askshift = 0;
-
   
 },33);
 
