@@ -1,44 +1,43 @@
 ﻿<center>
-<canvas id=canvas width=704 height=704 style="border:9px solid; background:#ddd">
+<canvas id=canvas width=704 height=704 style="border:9px solid">
 <script src=levels.js></script>
 <script>
 
 // Global vars
+var 
+cellsize = 64,
+gridsize = 11,
 
-cellsize = 64;
-gridsize = 11;
+w = .6,
+h = .8,
 
-w = .6;
-h = .8;
+speed_x = 0.17,
 
-speed_x = 0.19;
+gravity = .045,
+jump = -.32,
+vymax = 1,
 
-gravity = .045;
-jump = -.32;
-vymax = 1;
+heroscale = 1,
+padding = speed_x + 0.01,
+c=canvas.getContext`2d`,
+canjumpagain = 0,
 
-heroscale = 1;
-padding = speed_x + 0.01;
-c=canvas.getContext("2d");
-canjumpagain = 0;
-
-currentlevel = 6;
+currentlevel = 0,
+shiftframe = 0,
+wonframe = 0,
+grounded = 0,
+dead = 0,
+shifted = 0,
 
 // Keyboard
-E=R=T=_=s=e=u=d=l=r=0;
-onkeydown=onkeyup=z=>{
-  
-  top['lurdlRdTl*urEu*_e**s'[(z.which+3)%20]]=z.type[3]<'u';
-  if(!u) canjumpagain = 1;
-  if(_) load(currentlevel);
-}
+E=R=T=_=s=e=u=d=l=r=0,
 
 // Get cell value at x:y
 get = (x, y) => {
-  X = Math.floor(x);
-  Y = Math.floor(y);
-  return parseInt(m[Y * gridsize + X]);
-}
+  X = ~~x;
+  Y = ~~y;
+  return +(m[Y * gridsize + X]);
+},
 
 // Check if cell at x:y is solid
 isSolid = (x,y) => {
@@ -50,18 +49,18 @@ isSolid = (x,y) => {
         for(j in levels[currentlevel].keys[i].on){
           if(!shifted){
             if(
-              Math.floor(x) == levels[currentlevel].keys[i].on[j][0]
+              ~~x == levels[currentlevel].keys[i].on[j][0]
               && 
-              Math.floor(y) == levels[currentlevel].keys[i].on[j][1]
+              ~~y == levels[currentlevel].keys[i].on[j][1]
             ){
              return 1;
             }
           }
           else {
             if(
-              Math.floor(x) == 10-levels[currentlevel].keys[i].on[j][0]
+              ~~x == 10-levels[currentlevel].keys[i].on[j][0]
               && 
-              Math.floor(y) == 10-levels[currentlevel].keys[i].on[j][1]
+              ~~y == 10-levels[currentlevel].keys[i].on[j][1]
             ){
              return 1;
             }
@@ -73,18 +72,18 @@ isSolid = (x,y) => {
         for(j in levels[currentlevel].keys[i].off){
           if(!shifted){
             if(
-              Math.floor(x) == levels[currentlevel].keys[i].off[j][0]
+              ~~x == levels[currentlevel].keys[i].off[j][0]
               &&
-              Math.floor(y) == levels[currentlevel].keys[i].off[j][1]              
+              ~~y == levels[currentlevel].keys[i].off[j][1]              
             ){
              return 1;
             }
           }
           else {
             if(
-              Math.floor(x) == 10-levels[currentlevel].keys[i].off[j][0]
+              ~~x == 10-levels[currentlevel].keys[i].off[j][0]
               &&
-              Math.floor(y) == 10-levels[currentlevel].keys[i].off[j][1]
+              ~~y == 10-levels[currentlevel].keys[i].off[j][1]
             ){
              return 1;
             }
@@ -95,20 +94,20 @@ isSolid = (x,y) => {
     }
   }
   return 0;
-}
+},
 
 // Check if cell at x:y is shiftable
 isShiftable = (x,y) => {
   if(get(x,y)==1) return 1;
   if(get(x,y) == 4) return 1;
   return 0;
-}
+},
 
 // Load a level
 load = n => {
   dead = 0;
-  x = levels[currentlevel].start[0]+.3;
-  y = levels[currentlevel].start[1];
+  x = levels[n].start[0]+.3;
+  y = levels[n].start[1];
   vx = 0;
   vy = 0;
   grounded = 0;
@@ -116,14 +115,14 @@ load = n => {
   shiftframe = 0;
   heroscale = 1;
   wonframe=0;
-  m=levels[currentlevel].map;
+  m=levels[n].map;
   canvas.style.transform = "";
-  for(i in levels[currentlevel].keys){
-    levels[currentlevel].keys[i].taken = 0;
+  for(i in levels[n].keys){
+    levels[n].keys[i].taken = 0;
   }
-}
+};
 
-load(0);
+load(currentlevel);
 
 // Game loop
 setInterval(()=>{
@@ -213,10 +212,10 @@ setInterval(()=>{
         if(!levels[currentlevel].keys[i].taken){
           c.beginPath();
           if(!shifted){
-            c.arc(levels[currentlevel].keys[i].key[0] * cellsize + cellsize/ 2, levels[currentlevel].keys[i].key[1] * cellsize + cellsize / 2, cellsize / 4, 0, 6.29);
+            c.arc(levels[currentlevel].keys[i].key[0] * cellsize + cellsize/ 2, levels[currentlevel].keys[i].key[1] * cellsize + cellsize / 2, cellsize / 4, 0, 7);
           }
           else {
-            c.arc((10-levels[currentlevel].keys[i].key[0]) * cellsize + cellsize/ 2, (10-levels[currentlevel].keys[i].key[1]) * cellsize + cellsize / 2, cellsize / 4, 0, 6.29);
+            c.arc((10-levels[currentlevel].keys[i].key[0]) * cellsize + cellsize/ 2, (10-levels[currentlevel].keys[i].key[1]) * cellsize + cellsize / 2, cellsize / 4, 0, 7);
           }
           c.fill();
           c.closePath();
@@ -249,7 +248,7 @@ setInterval(()=>{
     
     // Text
     if(levels[currentlevel].msg){
-      c.font = '20px "Comic Sans MS", cursive, sans-serif';
+      c.font = '20px "Comic Sans MS",cursive';
       c.fillStyle = levels[currentlevel].msg[3];
       c.save();
       if(levels[currentlevel].msg[3] == "#fff" ^ shifted){
@@ -342,7 +341,7 @@ setInterval(()=>{
     if((vy >= 0) && ((isSolid(x,y + h) && isSolid(x+padding,y + h)) || (isSolid(x + w, y + h) && isSolid(x + w - padding, y + h)))){
       //console.log("hit box down");
       vy = 0;
-      y = Math.floor(y + h) - h;
+      y = ~~(y + h) - h;
     }
 
     // Hit box Left
@@ -354,7 +353,7 @@ setInterval(()=>{
     // Hit box right
     if((isSolid(x+w,y) && isSolid(x+w,y+padding)) || (isSolid(x+w, y+h) && isSolid(x+w, y+h - padding))){
      //console.log("hit box right");
-      x = Math.floor(x + w) - w;
+      x = ~~(x + w) - w;
     }
 
     // Check spikes
@@ -381,10 +380,10 @@ setInterval(()=>{
       if(!shifted){
         if(
           !levels[currentlevel].keys[i].taken
-          && Math.floor(x) >= levels[currentlevel].keys[i].key[0]
-          && Math.floor(x) < levels[currentlevel].keys[i].key[0] + 1
-          && Math.floor(y) >= levels[currentlevel].keys[i].key[1]
-          && Math.floor(y) < levels[currentlevel].keys[i].key[1] + 1
+          && ~~x >= levels[currentlevel].keys[i].key[0]
+          && ~~x < levels[currentlevel].keys[i].key[0] + 1
+          && ~~y >= levels[currentlevel].keys[i].key[1]
+          && ~~y < levels[currentlevel].keys[i].key[1] + 1
         ){
           levels[currentlevel].keys[i].taken = 1;
         }
@@ -392,10 +391,10 @@ setInterval(()=>{
       else {
         if(
           !levels[currentlevel].keys[i].taken
-          && Math.floor(x) >= 10-levels[currentlevel].keys[i].key[0]
-          && Math.floor(x) < 10-levels[currentlevel].keys[i].key[0] + 1
-          && Math.floor(y) >= 10-levels[currentlevel].keys[i].key[1]
-          && Math.floor(y) < 10-levels[currentlevel].keys[i].key[1] + 1
+          && ~~x >= 10-levels[currentlevel].keys[i].key[0]
+          && ~~x < 10-levels[currentlevel].keys[i].key[0] + 1
+          && ~~y >= 10-levels[currentlevel].keys[i].key[1]
+          && ~~y < 10-levels[currentlevel].keys[i].key[1] + 1
         ){
           levels[currentlevel].keys[i].taken = 1;
         }
@@ -436,5 +435,12 @@ setInterval(()=>{
   askshift = 0;
   
 },33);
+
+// Keyboard input
+onkeydown = onkeyup=z=>{
+  top['lurdlRdTl*urEu*_e**s'[(z.which+3)%20]]=z.type[3]<'u';
+  if(!u) canjumpagain = 1;
+  if(_) load(currentlevel);
+}
 
 </script>

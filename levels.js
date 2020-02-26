@@ -86,7 +86,7 @@ keys: [
   }
 ],
 
-msg: ["GRAB THE KEY TO MOVE THE PLATFORM", 150, 50, "#000"],
+msg: ["GRAB THE COIN TO MOVE THE PLATFORM", 150, 50, "#000"],
 
 },
 
