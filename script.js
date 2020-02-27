@@ -573,7 +573,6 @@ setInterval(()=>{
               c.fillRect((10-levels[currentlevel].keys[i].off[j][0]) * cellsize, (10-levels[currentlevel].keys[i].off[j][1]) * cellsize, cellsize, cellsize);
             }
           }
-           
         }
        
         // draw platform mode off
@@ -722,7 +721,6 @@ setInterval(()=>{
       wonframe = 30;
     }
     
-    
     // Grab key
     for(i in levels[currentlevel].keys){
       if(!shifted){
@@ -774,7 +772,6 @@ setInterval(()=>{
   }
   
   askshift = 0;
-  
 },33);
 
 // Keyboard input
