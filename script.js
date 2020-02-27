@@ -19,7 +19,7 @@ levels = [
 
 m:
 
-'00000000000\
+`00000000000\
 00000000000\
 00000000000\
 00000000000\
@@ -29,11 +29,11 @@ m:
 11111111111\
 11111111111\
 11111111111\
-11111111111',
+11111111111`,
 
 s: [1,5],
 
-t: ["RUN WITH ARROW KEYS", 200, 200, "#000"],
+t: [`RUN WITH ARROW KEYS`, 200, 200, `#000`],
 
 },
 
@@ -44,7 +44,7 @@ t: ["RUN WITH ARROW KEYS", 200, 200, "#000"],
 
 m:
 
-'00000000000\
+`00000000000\
 00000000000\
 00000000000\
 00000000000\
@@ -54,11 +54,11 @@ m:
 11101110111\
 11101110111\
 11101110111\
-11121112111',
+11121112111`,
 
 s: [1,5],
 
-t: ["PRESS UP TO JUMP", 250, 150, "#000"],
+t: [`PRESS UP TO JUMP`, 250, 150, `#000`],
 
 },
 
@@ -69,7 +69,7 @@ t: ["PRESS UP TO JUMP", 250, 150, "#000"],
 
 m:
 
-'00000000000\
+`00000000000\
 00000000000\
 00000000000\
 00111000000\
@@ -79,7 +79,7 @@ m:
 11001001111\
 11001031111\
 11001001111\
-11221221111',
+11221221111`,
 
 s: [1,6],
 
@@ -91,7 +91,7 @@ K: [
   }
 ],
 
-t: ["GRAB THE COIN", 250, 50, "#000"],
+t: [`GRAB THE COIN`, 250, 50, `#000`],
 
 },
 
@@ -101,7 +101,7 @@ t: ["GRAB THE COIN", 250, 50, "#000"],
 
 m:
 
-'00000000000\
+`00000000000\
 00000000000\
 00000000000\
 00000030000\
@@ -111,11 +111,11 @@ m:
 11111100011\
 11111111111\
 11111111111\
-11111111111',
+11111111111`,
 
 s: [1,4],
 
-t: ["SOMETIMES ALL YOU NEED TO DO IS SHIFT!", 100, 50, "#fff"],
+t: [`SOMETIMES ALL YOU NEED TO DO IS SHIFT!`, 100, 50, `#fff`],
 
 },
 
@@ -126,7 +126,7 @@ t: ["SOMETIMES ALL YOU NEED TO DO IS SHIFT!", 100, 50, "#fff"],
 
 m:
 
-'00020000000\
+`00020000000\
 00010000000\
 40110000001\
 10110011001\
@@ -136,7 +136,7 @@ m:
 00010000001\
 00011220001\
 10011111111\
-11111111111',
+11111111111`,
 
 s: [1,7],
 
@@ -158,7 +158,7 @@ K: [
 
 m:
 
-'10000000000\
+`10000000000\
 10011111110\
 10100000010\
 10100110010\
@@ -168,7 +168,7 @@ m:
 10011111010\
 10000000010\
 01111111110\
-30000000000',
+30000000000`,
 
 s: [3,6],
 
@@ -196,7 +196,7 @@ K: [
 
 m:
 
-'00000000000\
+`00000000000\
 00001111111\
 00000000101\
 11000000101\
@@ -206,7 +206,7 @@ m:
 11000110001\
 10000110011\
 10001110111\
-13221111111',
+13221111111`,
 
 s: [1,2],
 
@@ -219,7 +219,7 @@ K: [
   },
 ],
 
-t: ["PRESS SPACE TO RESTART", 250, 40, "#000"],
+t: [`PRESS SPACE TO RESTART`, 250, 40, `#000`],
 
 },
 
@@ -230,7 +230,7 @@ t: ["PRESS SPACE TO RESTART", 250, 40, "#000"],
 
 m:
 
-'00000101000\
+`00000101000\
 00000101000\
 01000101000\
 01011110000\
@@ -240,7 +240,7 @@ m:
 01011100110\
 00000111110\
 00011100000\
-01111100022',
+01111100022`,
 
 s: [],
 
@@ -255,7 +255,7 @@ K: [],
 
 m:
 
-'00022000000\
+`00022000000\
 10111100111\
 10111101100\
 00000101111\
@@ -265,7 +265,7 @@ m:
 10011100011\
 10000110011\
 11000110011\
-12222112111',
+12222112111`,
 
 s: [],
 
@@ -280,7 +280,7 @@ K: [],
 
 m:
 
-'00000000000\
+`00000000000\
 00000000000\
 00000000000\
 11101101101\
@@ -290,7 +290,7 @@ m:
 10111111111\
 10111000000\
 10000011111\
-11000111111',
+11000111111`,
 
 s: [],
 
@@ -305,7 +305,7 @@ K: [],
 
 m:
 
-'02000020000\
+`02000020000\
 01000011000\
 01000011000\
 01000011000\
@@ -315,7 +315,7 @@ m:
 01122110010\
 01111111110\
 01100000000\
-01110000000',
+01110000000`,
 
 s: [],
 
@@ -330,7 +330,7 @@ K: [],
 
 m:
 
-'00000000000\
+`00000000000\
 11111100000\
 00000001000\
 00000000001\
@@ -340,7 +340,7 @@ m:
 00000011011\
 00001011011\
 00001111111\
-00011111111',
+00011111111`,
 
 s: [],
 
@@ -355,7 +355,7 @@ K: [],
 
 m:
 
-'00100010001\
+`00100010001\
 10110011001\
 10110011001\
 10110011001\
@@ -365,13 +365,13 @@ m:
 10110011001\
 10110011001\
 00110011001\
-01110111011',
+01110111011`,
 
 s: [],
 
 K: [],
 
-spikes: 1,
+//spikes: 1,
 
 },
 
@@ -382,7 +382,7 @@ spikes: 1,
 
 m:
 
-'00000000000\
+`00000000000\
 00000000000\
 00000000000\
 00000000000\
@@ -392,13 +392,13 @@ m:
 11110000011\
 11110000011\
 11110000011\
-11110000011',
+11110000011`,
 
 s: [],
 
 K: [],
 
-spikes: 1
+//spikes: 1
 
 },
 
@@ -415,13 +415,16 @@ vymax = 1,
 heroscale = 1,
 padding = speed_x + 0.01,
 c = A.getContext`2d`,
-canjumpagain = 0,
 currentlevel = 0,
-shiftframe = 0,
-deadframe = 0,
-wonframe = 0,
-grounded = 0,
-shifted = 0,
+canjumpagain,
+shiftframe,
+askshift,
+deadframe,
+wonframe,
+grounded,
+shifted,
+
+_, s, u, d, l, r, // Keys pressed
 
 // Get cell value at x:y
 get = (x, y) => {
@@ -435,7 +438,7 @@ isSolid = (x,y) => {
   if(get(x,y) == 1 || get(x,y) == 4) return 1;
   if(levels[currentlevel].K){
     for(i of levels[currentlevel].K){
-      for(j of i[i.t?"n":"f"]){
+      for(j of i[i.t?`n`:`f`]){
         if(!shifted){
           if(~~x == j[0] && ~~y == j[1]){
            return 1;
@@ -466,21 +469,20 @@ load = n => {
   shifted = 0;
   heroscale = 1;
   m = levels[n].m;
-  A.style.transform = "";
+  A.style.transform = ``;
   if(levels[n].K){
     for(i of levels[n].K){
       i.t = 0;
     }
   }
-},
-
-// Keys pressed
-_ = s = u = d = l = r = 0;
+};
 
 load(currentlevel);
 
 // Game loop
 setInterval(() => {
+  
+  console.log(s);
 
   // Reset
   A.width ^= 0;
@@ -489,8 +491,8 @@ setInterval(() => {
   if(shiftframe && shiftframe < 9){
     A.style.transform = `rotate(${(10 - shiftframe) / 20}turn)`;
     if(shiftframe == 1){
-      m=m.split("").reverse().join("").replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4);
-      A.style.transform = "";
+      m=m.split``.reverse().join``.replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4);
+      A.style.transform = ``;
       x = 10 - x + .3;
       y = 10 - y;
       shifted = 1 - shifted;
@@ -523,11 +525,11 @@ setInterval(() => {
         else if((!shifted && a == 3) || (shifted && a == 4)){
         
           // Door
-          c.fillStyle="#888";
+          c.fillStyle = `#888`;
           c.fillRect(i*cellsize + 10, j*cellsize + (shifted ? 0 : 10), 44, 54);
           
           // Handle
-          c.fillStyle = "#000";
+          c.fillStyle = `#000`;
           c.fillRect(i*cellsize + 42, j*cellsize + (shifted ? 27 : 37), 7, 4);
         }
         
@@ -538,11 +540,11 @@ setInterval(() => {
           c.fillRect(i*cellsize, j*cellsize, cellsize, cellsize);
           
           // Door
-          c.fillStyle="#888";
+          c.fillStyle = `#888`;
           c.fillRect(i*cellsize + 10, j*cellsize + (shifted ? 10 : 0), 44, 54);
           
           // Handle
-          c.fillStyle = "#000";
+          c.fillStyle = `#000`;
           c.fillRect(i*cellsize + 42, j*cellsize + 27, 7, 4);
         }
       }
@@ -550,7 +552,7 @@ setInterval(() => {
     
     // Draw K and platforms
     if(levels[currentlevel].K){
-      c.fillStyle = "#aaa";
+      c.fillStyle = `#aaa`;
       for(i of levels[currentlevel].K){
       
         // Draw k
@@ -592,10 +594,10 @@ setInterval(() => {
     
     // Text
     if(levels[currentlevel].t){
-      c.font = '20px "Comic Sans MS",cursive';
+      c.font = `20px 'Comic Sans MS',cursive`;
       c.fillStyle = levels[currentlevel].t[3];
       c.save();
-      if(levels[currentlevel].t[3] == "#fff" ^ shifted){
+      if(levels[currentlevel].t[3] == `#fff` ^ shifted){
         c.translate(350, 350);
         c.rotate(3.14);
         c.translate(-350, -350);
@@ -607,7 +609,7 @@ setInterval(() => {
   
   // Press shift
   if(s){
-    if(shiftframe == 0 && isShiftable(x, y + h) && isShiftable(x + w - .1, y + h)){
+    if(!shiftframe && isShiftable(x, y + h) && isShiftable(x + w - .1, y + h)){
       shiftframe = 20;
     }
   }
@@ -663,53 +665,53 @@ setInterval(() => {
 
     // Hit screen bottom
     if(y + h > gridsize){
-      //console.log("hit screen bottom");
+      //console.log(`hit screen bottom`);
       y = gridsize - h;
       vy = 0;
     }
     
     // Hit screen ceiling
     if(y < 0){
-      //console.log("hit screen ceiling");
+      //console.log(`hit screen ceiling`);
       y = 0;
       vy = 0;
     }
     
     // Hit screen left
     if(x < 0){
-      //console.log("hit screen left");
+      //console.log(`hit screen left`);
       x = 0;
     }
     
     // Hit screen right
     if(x + w > gridsize){
-      //console.log("hit screen right");
+      //console.log(`hit screen right`);
       x = gridsize - w;
     }
     
     // Hit box up
     if((isSolid(x, y) && isSolid(x + padding, y)) || (isSolid(x + w, y) && isSolid(x + w - padding, y))){
-      //console.log("hit box up");
+      //console.log(`hit box up`);
       vy = 0;
       y = Math.ceil(y);
     }
 
     // Hit box down
     if((vy >= 0) && ((isSolid(x, y + h) && isSolid(x + padding, y + h)) || (isSolid(x + w, y + h) && isSolid(x + w - padding, y + h)))){
-      //console.log("hit box down");
+      //console.log(`hit box down`);
       vy = 0;
       y = ~~(y + h) - h;
     }
 
     // Hit box Left
     if((isSolid(x, y) && isSolid(x, y + padding)) || (isSolid(x, y + h) && isSolid(x, y + h - padding))){
-      //console.log("hit box left");
+      //console.log(`hit box left`);
       x = Math.ceil(x);
     }
 
     // Hit box right
     if((isSolid(x + w, y) && isSolid(x + w, y + padding)) || (isSolid(x + w, y + h) && isSolid(x + w, y + h - padding))){
-     //console.log("hit box right");
+     //console.log(`hit box right`);
       x = ~~(x + w) - w;
     }
 
@@ -771,7 +773,7 @@ setInterval(() => {
   }
     
   // Draw hero
-  c.fillStyle = wonframe ? "#2B3" : deadframe ? "#b11" : "#468";
+  c.fillStyle = wonframe ? `#2B3` : deadframe ? `#b11` : `#468`;
   c.save();
   c.translate(x * cellsize + w * cellsize / 2, y * cellsize + h * cellsize);
   c.scale(1, heroscale);
@@ -788,7 +790,7 @@ setInterval(() => {
   
   // Won transition
   if((wonframe && wonframe < 9) || (deadframe && deadframe < 9)){
-    c.fillStyle = "#000";
+    c.fillStyle = `#000`;
     c.fillRect(0, 0, 704, 704);
   }
   
@@ -797,7 +799,7 @@ setInterval(() => {
 
 // Keyboard input
 onkeydown = onkeyup = z => {
-  top['lurdl*d*l*ur*u*_***s'[(z.which + 3) % 20]] = z.type[3] < 'u';
+  top[`lurdl*d*l*ur*u*_***s`[(z.which + 3) % 20]] = z.type[3] < `u`;
   if(!u) canjumpagain = 1; // prevent jumping again while up is not released
   if(_) load(currentlevel); // reset with space
 }
