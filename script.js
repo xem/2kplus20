@@ -482,7 +482,7 @@ load(currentlevel);
 // Game loop
 setInterval(() => {
   
-  console.log(s);
+  //console.log(s);
 
   // Reset
   A.width ^= 0;
@@ -690,27 +690,27 @@ setInterval(() => {
     }
     
     // Hit box up
-    if((isSolid(x, y) && isSolid(x + padding, y)) || (isSolid(x + w, y) && isSolid(x + w - padding, y))){
+    if(isSolid(x + padding, y) || isSolid(x + w - padding, y)){
       //console.log(`hit box up`);
       vy = 0;
       y = Math.ceil(y);
     }
 
     // Hit box down
-    if((vy >= 0) && ((isSolid(x, y + h) && isSolid(x + padding, y + h)) || (isSolid(x + w, y + h) && isSolid(x + w - padding, y + h)))){
+    if((vy >= 0) && (isSolid(x + padding, y + h) || isSolid(x + w - padding, y + h))){
       //console.log(`hit box down`);
       vy = 0;
       y = ~~(y + h) - h;
     }
 
     // Hit box Left
-    if((isSolid(x, y) && isSolid(x, y + padding)) || (isSolid(x, y + h) && isSolid(x, y + h - padding))){
+    if(isSolid(x, y + padding) || isSolid(x, y + h - padding)){
       //console.log(`hit box left`);
       x = Math.ceil(x);
     }
 
     // Hit box right
-    if((isSolid(x + w, y) && isSolid(x + w, y + padding)) || (isSolid(x + w, y + h) && isSolid(x + w, y + h - padding))){
+    if(isSolid(x + w, y + padding) || isSolid(x + w, y + h - padding)){
      //console.log(`hit box right`);
       x = ~~(x + w) - w;
     }
@@ -728,8 +728,8 @@ setInterval(() => {
     // Test grounded
     if(
       y == gridsize - h 
-      || (isSolid(x, y + h) && isSolid(x + padding, y + h))
-      || (isSolid(x + w - padding, y + h) && isSolid(x + w, y + h))
+      || isSolid(x + padding, y + h)
+      || isSolid(x + w, y + h)
     ){
       grounded = 1;
     }
