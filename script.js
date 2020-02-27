@@ -8,16 +8,16 @@ var
 // 0: white
 // 1: black
 // 2: spike
-// 3: door on white
-// 4: door upside-down on black
+// 3: door n white
+// 4: door upside-down n black
 
 levels = [
 
-// 0: run with arrow keys
+// 0: run with arrow K
 
 {
 
-map:
+m:
 
 '00000000000\
 00000000000\
@@ -31,9 +31,9 @@ map:
 11111111111\
 11111111111',
 
-start: [1,5],
+s: [1,5],
 
-msg: ["RUN WITH ARROW KEYS, TOUCH THE DOOR TO CONTINUE", 50, 150, "#000"],
+t: ["RUN WITH ARROW KEYS", 200, 200, "#000"],
 
 },
 
@@ -42,7 +42,7 @@ msg: ["RUN WITH ARROW KEYS, TOUCH THE DOOR TO CONTINUE", 50, 150, "#000"],
 
 {
 
-map:
+m:
 
 '00000000000\
 00000000000\
@@ -56,18 +56,18 @@ map:
 11101110111\
 11121112111',
 
-start: [1,5],
+s: [1,5],
 
-msg: ["PRESS UP TO JUMP", 250, 150, "#000"],
+t: ["PRESS UP TO JUMP", 250, 150, "#000"],
 
 },
 
 
-// 2: key
+// 2: k
 
 {
 
-map:
+m:
 
 '00000000000\
 00000000000\
@@ -81,17 +81,17 @@ map:
 11001001111\
 11221221111',
 
-start: [1,6],
+s: [1,6],
 
-keys: [
-  { taken: 0,
-    key: [3,2],
-    off: [[8,9],[9,9]],
-    on: [[6,9],[7,9]],
+K: [
+  { t: 0,
+    k: [3,2],
+    f: [[8,9],[9,9]],
+    n: [[6,9],[7,9]],
   }
 ],
 
-msg: ["GRAB THE COIN TO MOVE THE PLATFORM", 150, 50, "#000"],
+t: ["GRAB THE COIN", 250, 50, "#000"],
 
 },
 
@@ -99,7 +99,7 @@ msg: ["GRAB THE COIN TO MOVE THE PLATFORM", 150, 50, "#000"],
 
 {
 
-map:
+m:
 
 '00000000000\
 00000000000\
@@ -113,18 +113,18 @@ map:
 11111111111\
 11111111111',
 
-start: [1,4],
+s: [1,4],
 
-msg: ["SOMETIMES ALL YOU NEED TO DO IS SHIFT!", 100, 50, "#fff"],
+t: ["SOMETIMES ALL YOU NEED TO DO IS SHIFT!", 100, 50, "#fff"],
 
 },
 
 
-// 4: reversed key and door
+// 4: reversed k and door
 
 {
 
-map:
+m:
 
 '00020000000\
 00010000000\
@@ -138,25 +138,25 @@ map:
 10011111111\
 11111111111',
 
-start: [1,7],
+s: [1,7],
 
-keys: [
+K: [
   {
-    taken: 0,
-    key: [7,4],
-    off: [[3,7],[2,7]],
-    on: [[4,7],[5,7]],
+    t: 0,
+    k: [7,4],
+    f: [[3,7],[2,7]],
+    n: [[4,7],[5,7]],
   },
 ],
 
 },
 
 
-// 5: spiral + 2 keys
+// 5: spiral + 2 K
 
 {
 
-map:
+m:
 
 '10000000000\
 10011111110\
@@ -170,20 +170,20 @@ map:
 01111111110\
 30000000000',
 
-start: [3,6],
+s: [3,6],
 
-keys: [
+K: [
   {
-    taken: 0,
-    key: [5,4],
-    off: [[7,3],[8,3]],
-    on: [[6,3],[7,3]],
+    t: 0,
+    k: [5,4],
+    f: [[7,3],[8,3]],
+    n: [[6,3],[7,3]],
   },
   {
-    taken: 0,
-    key: [1,6],
-    off: [[10,1]],
-    on: [[11,1]],
+    t: 0,
+    k: [1,6],
+    f: [[10,1]],
+    n: [[11,1]],
   },
 ],
 
@@ -194,7 +194,7 @@ keys: [
 
 {
 
-map:
+m:
 
 '00000000000\
 00001111111\
@@ -208,27 +208,27 @@ map:
 10001110111\
 13221111111',
 
-start: [1,2],
+s: [1,2],
 
-keys: [
+K: [
   {
-    taken: 0,
-    key: [9,2],
-    off: [[1,9],[2,9]],
-    on: [[3,9],[4,9]],
+    t: 0,
+    k: [9,2],
+    f: [[1,9],[2,9]],
+    n: [[3,9],[4,9]],
   },
 ],
 
-msg: ["PRESS SPACE TO RESTART", 250, 40, "#000"],
+t: ["PRESS SPACE TO RESTART", 250, 40, "#000"],
 
 },
 
 
-// 7: 4 keys (todo @2:18)
+// 7: 4 K (todo @2:18)
 
 {
 
-map:
+m:
 
 '00000101000\
 00000101000\
@@ -242,18 +242,18 @@ map:
 00011100000\
 01111100022',
 
-start: [],
+s: [],
 
-keys: [],
+K: [],
 
 },
 
 
-// 8: 3 keys (todo @3:08)
+// 8: 3 K (todo @3:08)
 
 {
 
-map:
+m:
 
 '00022000000\
 10111100111\
@@ -267,18 +267,18 @@ map:
 11000110011\
 12222112111',
 
-start: [],
+s: [],
 
-keys: [],
+K: [],
 
 },
 
 
-// 9: 3 keys (todo @4:01)
+// 9: 3 K (todo @4:01)
 
 {
 
-map:
+m:
 
 '00000000000\
 00000000000\
@@ -292,9 +292,9 @@ map:
 10000011111\
 11000111111',
 
-start: [],
+s: [],
 
-keys: [],
+K: [],
 
 },
 
@@ -303,7 +303,7 @@ keys: [],
 
 {
 
-map:
+m:
 
 '02000020000\
 01000011000\
@@ -317,18 +317,18 @@ map:
 01100000000\
 01110000000',
 
-start: [],
+s: [],
 
-keys: [],
+K: [],
 
 },
 
 
-// 11: 3 keys (todo @4:55)
+// 11: 3 K (todo @4:55)
 
 {
 
-map:
+m:
 
 '00000000000\
 11111100000\
@@ -342,9 +342,9 @@ map:
 00001111111\
 00011111111',
 
-start: [],
+s: [],
 
-keys: [],
+K: [],
 
 },
 
@@ -353,7 +353,7 @@ keys: [],
 
 {
 
-map:
+m:
 
 '00100010001\
 10110011001\
@@ -367,9 +367,9 @@ map:
 00110011001\
 01110111011',
 
-start: [],
+s: [],
 
-keys: [],
+K: [],
 
 spikes: 1,
 
@@ -380,7 +380,7 @@ spikes: 1,
 
 {
 
-map:
+m:
 
 '00000000000\
 00000000000\
@@ -394,9 +394,9 @@ map:
 11110000011\
 11110000011',
 
-start: [],
+s: [],
 
-keys: [],
+K: [],
 
 spikes: 1
 
@@ -414,17 +414,14 @@ jump = -.32,
 vymax = 1,
 heroscale = 1,
 padding = speed_x + 0.01,
-c = A.getContext('2d'),
+c = A.getContext`2d`,
 canjumpagain = 0,
-currentlevel = 4,
+currentlevel = 0,
 shiftframe = 0,
 deadframe = 0,
 wonframe = 0,
 grounded = 0,
 shifted = 0,
-
-// Keyboard
-E=R=T=_=s=e=u=d=l=r=0,
 
 // Get cell value at x:y
 get = (x, y) => {
@@ -436,9 +433,9 @@ get = (x, y) => {
 // Check if cell at x:y is solid
 isSolid = (x,y) => {
   if(get(x,y) == 1 || get(x,y) == 4) return 1;
-  if(levels[currentlevel].keys){
-    for(i of levels[currentlevel].keys){
-      for(j of i[i.taken?"on":"off"]){
+  if(levels[currentlevel].K){
+    for(i of levels[currentlevel].K){
+      for(j of i[i.t?"n":"f"]){
         if(!shifted){
           if(~~x == j[0] && ~~y == j[1]){
            return 1;
@@ -461,33 +458,38 @@ isShiftable = (x,y) => {
 
 // Load a level
 load = n => {
-  x = levels[n].start[0] + .3;
-  y = levels[n].start[1];
+  x = levels[n].s[0] + .3;
+  y = levels[n].s[1];
   vx = 0;
   vy = 0;
   grounded = 0;
   shifted = 0;
   heroscale = 1;
-  m = levels[n].map;
+  m = levels[n].m;
   A.style.transform = "";
-  for(i in levels[n].keys){
-    levels[n].keys[i].taken = 0;
+  if(levels[n].K){
+    for(i of levels[n].K){
+      i.t = 0;
+    }
   }
-};
+},
+
+// Keys pressed
+_ = s = u = d = l = r = 0;
 
 load(currentlevel);
 
 // Game loop
-setInterval(()=>{
+setInterval(() => {
 
   // Reset
   A.width ^= 0;
   
   c.save();
   if(shiftframe && shiftframe < 9){
-    A.style.transform = "rotate(" + ((10 - shiftframe) / 20) + "turn)";
+    A.style.transform = `rotate(${(10 - shiftframe) / 20}turn)`;
     if(shiftframe == 1){
-      m=m.split("").reverse().join("").replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g,4);
+      m=m.split("").reverse().join("").replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4);
       A.style.transform = "";
       x = 10 - x + .3;
       y = 10 - y;
@@ -496,7 +498,7 @@ setInterval(()=>{
     }
   }
   
-  // Draw map
+  // Draw m
   if(wonframe > 10 || !wonframe){
     for(i = 0; i < gridsize; i++){
       for(j = 0; j < gridsize; j++){
@@ -517,19 +519,19 @@ setInterval(()=>{
           c.fill();
         }
         
-        // Door on white cell
+        // Door n white cell
         else if((!shifted && a == 3) || (shifted && a == 4)){
         
           // Door
           c.fillStyle="#888";
-          c.fillRect(i*cellsize+10,j*cellsize + (shifted ? 0 : 10), 44, 54);
+          c.fillRect(i*cellsize + 10, j*cellsize + (shifted ? 0 : 10), 44, 54);
           
           // Handle
           c.fillStyle = "#000";
-          c.fillRect(i*cellsize+42, j*cellsize + (shifted ? 27 : 37), 7, 4);
+          c.fillRect(i*cellsize + 42, j*cellsize + (shifted ? 27 : 37), 7, 4);
         }
         
-        // Door on black cell
+        // Door n black cell
         else if((!shifted && a == 4)||(shifted && a == 3)){
           
           // Black cell
@@ -546,43 +548,42 @@ setInterval(()=>{
       }
     }
     
-    // Draw keys and platforms
-    if(levels[currentlevel].keys){
+    // Draw K and platforms
+    if(levels[currentlevel].K){
       c.fillStyle = "#aaa";
-      for(i in levels[currentlevel].keys){
-      //console.log(levels[currentlevel].keys[i].taken);
+      for(i of levels[currentlevel].K){
       
-        // Draw key
-        if(!levels[currentlevel].keys[i].taken){
+        // Draw k
+        if(!i.t){
           c.beginPath();
-          if(!shifted){
-            c.arc(levels[currentlevel].keys[i].key[0] * cellsize + cellsize/ 2, levels[currentlevel].keys[i].key[1] * cellsize + cellsize / 2, cellsize / 4, 0, 7);
+          if(shifted){
+            c.arc((10 - i.k[0]) * cellsize + cellsize/ 2, (10 - i.k[1]) * cellsize + cellsize / 2, cellsize / 4, 0, 7);
           }
           else {
-            c.arc((10-levels[currentlevel].keys[i].key[0]) * cellsize + cellsize/ 2, (10-levels[currentlevel].keys[i].key[1]) * cellsize + cellsize / 2, cellsize / 4, 0, 7);
+            c.arc(i.k[0] * cellsize + cellsize / 2, i.k[1] * cellsize + cellsize / 2, cellsize / 4, 0, 7);
           }
           c.fill();
           c.closePath();
             
-          // draw platform mode on
-          for(j in levels[currentlevel].keys[i].off){
-            if(!shifted){
-              c.fillRect(levels[currentlevel].keys[i].off[j][0] * cellsize, levels[currentlevel].keys[i].off[j][1] *cellsize, cellsize, cellsize);
+          // Draw platform mode n
+          for(j of i.f){
+            if(shifted){
+              c.fillRect((10 - j[0]) * cellsize, (10 - j[1]) * cellsize, cellsize, cellsize);
             }
             else {
-              c.fillRect((10-levels[currentlevel].keys[i].off[j][0]) * cellsize, (10-levels[currentlevel].keys[i].off[j][1]) * cellsize, cellsize, cellsize);
+              c.fillRect(j[0] * cellsize, j[1] *cellsize, cellsize, cellsize);
             }
           }
         }
        
-        // draw platform mode off
+        // Draw platform mode f
         else{
-          for(j in levels[currentlevel].keys[i].on){
-            if(!shifted){
-              c.fillRect(levels[currentlevel].keys[i].on[j][0] * cellsize, levels[currentlevel].keys[i].on[j][1] * cellsize, cellsize, cellsize);
+          for(j of i.n){
+            if(shifted){
+              c.fillRect((10 - j[0]) * cellsize, (10 - j[1]) * cellsize, cellsize, cellsize);
             }
             else {
-              c.fillRect((10-levels[currentlevel].keys[i].on[j][0]) * cellsize, (10-levels[currentlevel].keys[i].on[j][1]) * cellsize, cellsize, cellsize);
+              c.fillRect(j[0] * cellsize, j[1] * cellsize, cellsize, cellsize);
             }
           }
         }
@@ -590,23 +591,23 @@ setInterval(()=>{
     }
     
     // Text
-    if(levels[currentlevel].msg){
+    if(levels[currentlevel].t){
       c.font = '20px "Comic Sans MS",cursive';
-      c.fillStyle = levels[currentlevel].msg[3];
+      c.fillStyle = levels[currentlevel].t[3];
       c.save();
-      if(levels[currentlevel].msg[3] == "#fff" ^ shifted){
-        c.translate(350,350);
+      if(levels[currentlevel].t[3] == "#fff" ^ shifted){
+        c.translate(350, 350);
         c.rotate(3.14);
-        c.translate(-350,-350);
+        c.translate(-350, -350);
       }
-      c.fillText(levels[currentlevel].msg[0],levels[currentlevel].msg[1],levels[currentlevel].msg[2]);
+      c.fillText(levels[currentlevel].t[0], levels[currentlevel].t[1],levels[currentlevel].t[2]);
       c.restore();
     }
   }
   
   // Press shift
   if(s){
-    if(shiftframe == 0 && isShiftable(x,y+h) && isShiftable(x+w-.1,y+h)){
+    if(shiftframe == 0 && isShiftable(x, y + h) && isShiftable(x + w - .1, y + h)){
       shiftframe = 20;
     }
   }
@@ -622,28 +623,34 @@ setInterval(()=>{
   // Dead
   else if(deadframe){
     deadframe--;
-    if(deadframe == 0){
+    if(deadframe == 1){
       load(currentlevel);
     }
   }
   
   else {
     
-    // Apply speed to pos
+    // Apply speed to position
     if(r && !shiftframe){
       vx = speed_x;
     }
+    
     else if(l && !shiftframe){
-      vx =-speed_x;
+      vx =- speed_x;
     }
+    
     else{
-      vx=0;
+      vx = 0;
     }
-    if(grounded && u && canjumpagain){  // jump
+    
+    // Jump
+    if(u && grounded && canjumpagain){
       canjumpagain = 1 - canjumpagain;
       vy = jump;
     }
-    if(1-grounded){   // fall
+    
+    // Fall
+    if(1 - grounded){
       vy += gravity;
       vy = Math.min(vy, vymax);
     }
@@ -660,100 +667,115 @@ setInterval(()=>{
       y = gridsize - h;
       vy = 0;
     }
+    
     // Hit screen ceiling
-    if(y<0){
+    if(y < 0){
       //console.log("hit screen ceiling");
       y = 0;
       vy = 0;
     }
+    
     // Hit screen left
-    if(x<0){
+    if(x < 0){
       //console.log("hit screen left");
-      x=0;
+      x = 0;
     }
+    
     // Hit screen right
-    if(x + w >gridsize){
+    if(x + w > gridsize){
       //console.log("hit screen right");
       x = gridsize - w;
     }
     
-    // Hit Box up
-    if((isSolid(x,y) && isSolid(x + padding,y))  || (isSolid(x+w,y) && isSolid(x+w - padding,y))){
+    // Hit box up
+    if((isSolid(x, y) && isSolid(x + padding, y)) || (isSolid(x + w, y) && isSolid(x + w - padding, y))){
       //console.log("hit box up");
-      vy=0;
+      vy = 0;
       y = Math.ceil(y);
     }
 
-    // Hit Box down
-    if((vy >= 0) && ((isSolid(x,y + h) && isSolid(x+padding,y + h)) || (isSolid(x + w, y + h) && isSolid(x + w - padding, y + h)))){
+    // Hit box down
+    if((vy >= 0) && ((isSolid(x, y + h) && isSolid(x + padding, y + h)) || (isSolid(x + w, y + h) && isSolid(x + w - padding, y + h)))){
       //console.log("hit box down");
       vy = 0;
       y = ~~(y + h) - h;
     }
 
     // Hit box Left
-    if((isSolid(x, y) && isSolid(x, y+padding)) || (isSolid(x, y+h) && isSolid(x, y+h - padding))){
+    if((isSolid(x, y) && isSolid(x, y + padding)) || (isSolid(x, y + h) && isSolid(x, y + h - padding))){
       //console.log("hit box left");
       x = Math.ceil(x);
     }
 
     // Hit box right
-    if((isSolid(x+w,y) && isSolid(x+w,y+padding)) || (isSolid(x+w, y+h) && isSolid(x+w, y+h - padding))){
+    if((isSolid(x + w, y) && isSolid(x + w, y + padding)) || (isSolid(x + w, y + h) && isSolid(x + w, y + h - padding))){
      //console.log("hit box right");
       x = ~~(x + w) - w;
     }
 
     // Check spikes
-    if(get(x+.3,y+.3) == 2 || get(x+.3,y+h-.3) == 2 || get(x+w-.3,y+.3) == 2 || get(x+w-.3,y+h-.3) == 2){
+    if(
+      get(x + .3, y + .3) == 2 
+      || get(x + .3, y + h - .3) == 2 
+      || get(x + w- .3, y + .3) == 2 
+      || get(x + w - .3, y + h - .3) == 2
+    ){
       deadframe = 20;
     }
     
     // Test grounded
-    if(y == gridsize - h || (isSolid(x, y+h) && isSolid(x + padding, y+h)) || (isSolid(x+w - padding, y+h) && isSolid(x+w, y+h))){
+    if(
+      y == gridsize - h 
+      || (isSolid(x, y + h) && isSolid(x + padding, y + h))
+      || (isSolid(x + w - padding, y + h) && isSolid(x + w, y + h))
+    ){
       grounded = 1;
     }
+    
     else{
       grounded = 0;
     }   
     
     // Test door
-    if(grounded && get(x,y) == 3 && get(x+w,y) == 3){
+    if(grounded && get(x, y) == 3 && get(x + w, y) == 3){
       wonframe = 30;
     }
     
     // Grab key
-    for(i in levels[currentlevel].keys){
-      if(!shifted){
-        if(
-          !levels[currentlevel].keys[i].taken
-          && ~~x >= levels[currentlevel].keys[i].key[0]
-          && ~~x < levels[currentlevel].keys[i].key[0] + 1
-          && ~~y >= levels[currentlevel].keys[i].key[1]
-          && ~~y < levels[currentlevel].keys[i].key[1] + 1
-        ){
-          levels[currentlevel].keys[i].taken = 1;
+    if(levels[currentlevel].K){
+      for(i of levels[currentlevel].K){
+        if(!shifted){
+          if(
+            !i.t
+            && ~~x >= i.k[0]
+            && ~~x < i.k[0] + 1
+            && ~~y >= i.k[1]
+            && ~~y < i.k[1] + 1
+          ){
+            i.t = 1;
+          }
         }
-      }
-      else {
-        if(
-          !levels[currentlevel].keys[i].taken
-          && ~~x >= 10-levels[currentlevel].keys[i].key[0]
-          && ~~x < 10-levels[currentlevel].keys[i].key[0] + 1
-          && ~~y >= 10-levels[currentlevel].keys[i].key[1]
-          && ~~y < 10-levels[currentlevel].keys[i].key[1] + 1
-        ){
-          levels[currentlevel].keys[i].taken = 1;
+        else {
+          if(
+            !i.t
+            && ~~x >= 10 - i.k[0]
+            && ~~x < 10 - i.k[0] + 1
+            && ~~y >= 10 - i.k[1]
+            && ~~y < 10 - i.k[1] + 1
+          ){
+            i.t = 1;
+          }
         }
       }
     }
   }
     
   // Draw hero
-  c.fillStyle=wonframe ? "#2B3" : deadframe ? "#b11" : "#468";
+  c.fillStyle = wonframe ? "#2B3" : deadframe ? "#b11" : "#468";
   c.save();
-  c.translate(x*cellsize+w*cellsize/2,y*cellsize+h*cellsize);
+  c.translate(x * cellsize + w * cellsize / 2, y * cellsize + h * cellsize);
   c.scale(1, heroscale);
-  c.fillRect(-w*cellsize/2,0, w*cellsize, -h*cellsize);
+  c.fillRect(-w * cellsize / 2, 0, w * cellsize, -h * cellsize);
   c.restore();
 
   // Shift animation
@@ -761,22 +783,21 @@ setInterval(()=>{
     shiftframe--;
     if(shiftframe > 9){
       heroscale = -((15 - shiftframe) / 5);
-      
     }
   }
   
   // Won transition
-  if((wonframe && wonframe < 9)||(deadframe && deadframe < 9)){
+  if((wonframe && wonframe < 9) || (deadframe && deadframe < 9)){
     c.fillStyle = "#000";
-    c.fillRect(0,0,704,704);
+    c.fillRect(0, 0, 704, 704);
   }
   
   askshift = 0;
-},33);
+}, 33);
 
 // Keyboard input
-onkeydown = onkeyup=z=>{
-  top['lurdlRdTl*urEu*_e**s'[(z.which+3)%20]]=z.type[3]<'u';
-  if(!u) canjumpagain = 1;
-  if(_) load(currentlevel);
+onkeydown = onkeyup = z => {
+  top['lurdl*d*l*ur*u*_***s'[(z.which + 3) % 20]] = z.type[3] < 'u';
+  if(!u) canjumpagain = 1; // prevent jumping again while up is not released
+  if(_) load(currentlevel); // reset with space
 }
