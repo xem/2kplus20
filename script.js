@@ -416,7 +416,7 @@ heroscale = 1,
 padding = speed_x + 0.01,
 c = A.getContext('2d'),
 canjumpagain = 0,
-currentlevel = 0,
+currentlevel = 4,
 shiftframe = 0,
 deadframe = 0,
 wonframe = 0,
@@ -518,28 +518,30 @@ setInterval(()=>{
         }
         
         // Door on white cell
-        else if((!shifted && a==3)||(shifted && a==4)){
+        else if((!shifted && a == 3) || (shifted && a == 4)){
         
           // Door
           c.fillStyle="#888";
-          c.fillRect(i*cellsize+10,j*cellsize + (shifted ? 0 : 10),44,54);
+          c.fillRect(i*cellsize+10,j*cellsize + (shifted ? 0 : 10), 44, 54);
           
-          c.fillStyle="#000";
+          // Handle
+          c.fillStyle = "#000";
+          c.fillRect(i*cellsize+42, j*cellsize + (shifted ? 27 : 37), 7, 4);
         }
         
         // Door on black cell
-        else if((!shifted && a==4)||(shifted && a==3)){
+        else if((!shifted && a == 4)||(shifted && a == 3)){
           
           // Black cell
-          c.fillRect(i*cellsize,j*cellsize,cellsize,cellsize);
+          c.fillRect(i*cellsize, j*cellsize, cellsize, cellsize);
           
           // Door
           c.fillStyle="#888";
-          c.fillRect(i*cellsize+10,j*cellsize + (shifted ? 10 : 0),44,54);
+          c.fillRect(i*cellsize + 10, j*cellsize + (shifted ? 10 : 0), 44, 54);
           
+          // Handle
           c.fillStyle = "#000";
-          
-          
+          c.fillRect(i*cellsize + 42, j*cellsize + 27, 7, 4);
         }
       }
     }
