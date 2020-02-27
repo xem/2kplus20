@@ -181,7 +181,7 @@ K: [
   },
   {
     t: 0,
-    k: [1,6],
+    k: [1,5],
     f: [[10,1]],
     n: [[11,1]],
   },
@@ -219,7 +219,7 @@ K: [
   },
 ],
 
-t: [`PRESS SPACE TO RESTART`, 250, 40, `#000`],
+t: [`PRESS SPACE TO RESTART`, 200, 40, `#000`],
 
 },
 
@@ -415,7 +415,7 @@ vymax = 1,
 heroscale = 1,
 padding = speed_x + 0.01,
 c = A.getContext`2d`,
-currentlevel = 0,
+currentlevel = 6,
 canjumpagain,
 shiftframe,
 askshift,
@@ -594,7 +594,7 @@ setInterval(() => {
     
     // Text
     if(levels[currentlevel].t){
-      c.font = `20px 'Comic Sans MS',cursive`;
+      c.font = `25px calibri`;
       c.fillStyle = levels[currentlevel].t[3];
       c.save();
       if(levels[currentlevel].t[3] == `#fff` ^ shifted){
@@ -711,7 +711,7 @@ setInterval(() => {
 
     // Hit box right
     if(isSolid(x + w, y + padding) || isSolid(x + w, y + h - padding)){
-     //console.log(`hit box right`);
+      //console.log(`hit box right`);
       x = ~~(x + w) - w;
     }
 
@@ -729,7 +729,7 @@ setInterval(() => {
     if(
       y == gridsize - h 
       || isSolid(x + padding, y + h)
-      || isSolid(x + w, y + h)
+      || isSolid(x + w - padding, y + h)
     ){
       grounded = 1;
     }
