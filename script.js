@@ -350,7 +350,7 @@ K: [
 },
 
 
-// 10 (todo @4:40)
+// 10
 
 {
 
@@ -362,26 +362,24 @@ m:
 01000011000\
 01000011000\
 01001010000\
-01000010020\
+01300010020\
 01122110010\
 01111111110\
 01100000000\
 01110000000`,
 
-s: [],
-
-K: [],
+s: [7,7],
 
 },
 
 
-// 11: 3 keys (todo @4:55)
+// 11: 3 keys
 
 {
 
 m:
 
-`00000000000\
+`30000000000\
 11111100000\
 00000001000\
 00000000001\
@@ -466,7 +464,7 @@ vymax = 1,
 heroscale = 1,
 padding = speed_x + 0.01,
 c = A.getContext`2d`,
-currentlevel = 10,
+currentlevel = 0,
 canjumpagain,
 shiftframe,
 askshift,
@@ -790,12 +788,12 @@ setInterval(() => {
     }   
     
     // Test door
-    if(grounded && get(x, y) == 3 && get(x + w, y) == 3){
+    if(grounded && get(x, y) == 3 && get(x + w, y) == 3 && !shiftframe){
       wonframe = 30;
     }
     
     // Grab key
-    if(levels[currentlevel].K){
+    if(levels[currentlevel].K && !shiftframe){
       for(i of levels[currentlevel].K){
         if(!shifted){
           if(
