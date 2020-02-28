@@ -1,3 +1,6 @@
+// Keys pressed
+_ = s = u = d = l = r = 0;
+
 
 // Global vars
 var 
@@ -33,7 +36,7 @@ m:
 
 s: [1,5],
 
-t: [`RUN WITH ARROW KEYS`, 200, 200, `#000`],
+t: [`MOVE WITH ARROW KEYS`, 20, 20, `#000`],
 
 },
 
@@ -57,8 +60,6 @@ m:
 11121112111`,
 
 s: [1,5],
-
-t: [`PRESS UP TO JUMP`, 250, 150, `#000`],
 
 },
 
@@ -91,7 +92,7 @@ K: [
   }
 ],
 
-t: [`GRAB THE COIN`, 250, 50, `#000`],
+t: [`GRAB THE COIN`, 25, 5, `#000`],
 
 },
 
@@ -115,7 +116,7 @@ m:
 
 s: [1,4],
 
-t: [`SOMETIMES ALL YOU NEED TO DO IS SHIFT!`, 100, 50, `#fff`],
+t: [`SHIFT YOUR PERSPECTIVE!`, 20, 5, `#fff`],
 
 },
 
@@ -171,7 +172,7 @@ m:
 
 s: [3,6],
 
-t: [`PRESS SPACE TO RESET`, 200, 40, `#000`],
+t: [`PRESS SPACE TO RESET`, 20, 4, `#000`],
 
 K: [
   {
@@ -262,14 +263,12 @@ K: [
     f: [],
     n: [[10,10],[9,10]]
   }
-  
-
 ],
 
 },
 
 
-// 8: 3 keys (todo @3:08)
+// 8:
 
 {
 
@@ -351,7 +350,7 @@ K: [
 },
 
 
-// 10
+/*// 10
 
 {
 
@@ -372,7 +371,7 @@ m:
 s: [7,7],
 
 },
-
+*/
 
 // 11: 3 keys
 
@@ -484,10 +483,9 @@ m: `00000000000\
 
 s: [5,3],
 
-t: ["THE END →",500,600]
+t: [`THE END >`, 50, 60]
 }
   
-
 ],
 
 cellsize = 64,
@@ -501,7 +499,7 @@ vymax = 1,
 heroscale = 1,
 padding = speed_x + 0.01,
 c = A.getContext`2d`,
-currentlevel = 12,
+currentlevel,
 canjumpagain,
 shiftframe,
 askshift,
@@ -509,20 +507,21 @@ deadframe,
 wonframe,
 grounded,
 shifted,
-
-_, s, u, d, l, r, // Keys pressed
+vx,
+vy,
+map,
 
 // Get cell value at x:y
 get = (x, y) => {
   X = ~~x;
   Y = ~~y;
-  return +(m[Y * gridsize + X]);
+  return +(map[Y * gridsize + X]);
 },
 
-// Check if cell at x:y is solid
-isSolid = (x,y) => {
+// Check if cell at x:y is solid / shiftable
+isSolid = (x, y, test_shift_only) => {
   if(get(x,y) == 1 || get(x,y) == 4) return 1;
-  if(levels[currentlevel].K){
+  if(!test_shift_only && levels[currentlevel].K){
     for(i of levels[currentlevel].K){
       for(j of i[i.t?`n`:`f`]){
         if(!shifted){
@@ -540,11 +539,6 @@ isSolid = (x,y) => {
   }
 },
 
-// Check if cell at x:y is shiftable
-isShiftable = (x,y) => {
-  if(get(x,y) == 1 || get(x,y) == 4) return 1;
-},
-
 // Load a level
 load = n => {
   x = levels[n].s[0] + .3;
@@ -555,7 +549,10 @@ load = n => {
   shifted = 0;
   heroscale = 1;
   M = levels[n].m;
-  m = M.split``;
+  //m = M.split``;
+  /*p = M.split``.reverse().join``.replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4).split``;
+  map = m.join``.split``;*/
+  map = M.split``;
   A.style.transform = ``;
   if(levels[n].K){
     for(i of levels[n].K){
@@ -564,33 +561,34 @@ load = n => {
   }
 };
 
-load(currentlevel);
+load(currentlevel = 0);
 
 // Game loop
 setInterval(() => {
   
   //console.log(s);
-  
 
   // Reset
   A.width ^= 0;
   
   c.save();
   if(shiftframe && shiftframe < 9){
-    A.style.transform = `rotate(${(10 - shiftframe) / 20}turn)`;
+    A.style.transform = `rotate(${(10-shiftframe)/20}turn)`;
     if(shiftframe == 1){
-      
-      // Make an array from the map
-      m = M.split``;
-      
-      if(!shifted){
-        m = m.reverse().join``.replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4).split``;
-      }
       A.style.transform = ``;
       x = 10 - x + .3;
       y = 10 - y;
       shifted = 1 - shifted;
       heroscale = 1;
+      
+      M = levels[currentlevel].m;
+      
+      if(shifted){
+        map = M.split``.reverse().join``.replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4).split``;
+      }
+      else{
+        map = M.split``;
+      }
     }
   }
   
@@ -598,7 +596,7 @@ setInterval(() => {
   if(wonframe > 10 || !wonframe){
     for(i = 0; i < gridsize; i++){
       for(j = 0; j < gridsize; j++){
-        a = (m[j * gridsize + i]);
+        a = (map[j * gridsize + i]);
         
         // Black cell
         if((!shifted && a == 1) || (shifted && a == 0)){
@@ -628,7 +626,7 @@ setInterval(() => {
         }
         
         // Door on black cell
-        else if((!shifted && a == 4)||(shifted && a == 3)){
+        else if((!shifted && a == 4) || (shifted && a == 3)){
           
           // Black cell
           c.fillRect(i*cellsize, j*cellsize, cellsize, cellsize);
@@ -653,10 +651,10 @@ setInterval(() => {
         if(!i.t){
           c.beginPath();
           if(shifted){
-            c.arc((10 - i.k[0]) * cellsize + cellsize/ 2, (10 - i.k[1]) * cellsize + cellsize / 2, cellsize / 4, 0, 7);
+            c.arc((10 - i.k[0]) * cellsize + cellsize/ 2, (10 - i.k[1]) * cellsize + cellsize / 2, 9, 0, 7);
           }
           else {
-            c.arc(i.k[0] * cellsize + cellsize / 2, i.k[1] * cellsize + cellsize / 2, cellsize / 4, 0, 7);
+            c.arc(i.k[0] * cellsize + cellsize / 2, i.k[1] * cellsize + cellsize / 2, 9, 0, 7);
           }
           c.fill();
           c.closePath();
@@ -667,12 +665,12 @@ setInterval(() => {
         for(j of i[i.t?`n`:`f`]){
           if(shifted){
             c.fillRect((10 - j[0]) * cellsize, (10 - j[1]) * cellsize, cellsize, cellsize);
-            m[(10 - j[0])+(10 - j[1]) * gridsize] = 9;
+            map[(10 - j[0])+(10 - j[1]) * gridsize] = 9;
           }
           else {
             //console.log(i);
             c.fillRect(j[0] * cellsize, j[1] * cellsize, cellsize, cellsize);
-            m[j[0] + j[1] * gridsize] = 9;
+            map[j[0] + j[1] * gridsize] = 9;
           }
         }
       }
@@ -680,7 +678,7 @@ setInterval(() => {
     
     // Text
     if(levels[currentlevel].t){
-      c.font = `25px calibri`;
+      c.font = `30px calibri`;
       c.fillStyle = levels[currentlevel].t[3];
       c.save();
       if(levels[currentlevel].t[3] == `#fff` ^ shifted){
@@ -688,14 +686,14 @@ setInterval(() => {
         c.rotate(3.14);
         c.translate(-350, -350);
       }
-      c.fillText(levels[currentlevel].t[0], levels[currentlevel].t[1],levels[currentlevel].t[2]);
+      c.fillText(levels[currentlevel].t[0], levels[currentlevel].t[1]*10,levels[currentlevel].t[2]*10);
       c.restore();
     }
   }
   
   // Press shift
   if(s){
-    if(!shiftframe && isShiftable(x, y + h) && isShiftable(x + w - .1, y + h)){
+    if(!shiftframe && isSolid(x, y + h,1) && isSolid(x + w - .1, y + h,1)){
       shiftframe = 20;
     }
   }
@@ -740,7 +738,7 @@ setInterval(() => {
     // Fall
     if(1 - grounded){
       vy += gravity;
-      vy = Math.min(vy, vymax);
+      if(vy > vymax) vy = vymax;
     }
     y += vy;
     x += vx;
@@ -779,7 +777,7 @@ setInterval(() => {
     if(isSolid(x + padding, y) || isSolid(x + w - padding, y)){
       //console.log(`hit box up`);
       vy = 0;
-      y = Math.ceil(y);
+      y = ~~y + 1;
     }
 
     // Hit box down
@@ -792,7 +790,7 @@ setInterval(() => {
     // Hit box left
     if(isSolid(x, y + padding) || isSolid(x, y + h - padding)){
       //console.log(`hit box left`);
-      x = Math.ceil(x);
+      x = ~~x + 1;
     }
 
     // Hit box right
@@ -825,7 +823,7 @@ setInterval(() => {
     }   
     
     // Test door
-    if(grounded && get(x, y) == 3 && get(x + w, y) == 3 && !shiftframe){
+    if(grounded && get(x, y) == 3 && get(x + w, y) == 3 /*&& !shiftframe*/){
       wonframe = 30;
     }
     
@@ -841,7 +839,7 @@ setInterval(() => {
             && ~~y < i.k[1] + 1
           ){
             i.t = 1;
-            m = M.split``;
+            map = M.split``;
           }
         }
         else {
@@ -853,8 +851,7 @@ setInterval(() => {
             && ~~y < 10 - i.k[1] + 1
           ){
             i.t = 1;
-            m = M.split``;
-            m = m.reverse().join``.replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4).split``;
+            map = M.split``.reverse().join``.replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4).split``;
           }
         }
       }
@@ -880,7 +877,7 @@ setInterval(() => {
   // Won transition
   if((wonframe && wonframe < 9) || (deadframe && deadframe < 9)){
     c.fillStyle = `#000`;
-    c.fillRect(0, 0, 704, 704);
+    c.fillRect(0, 0, 800, 800);
   }
   
   askshift = 0;
