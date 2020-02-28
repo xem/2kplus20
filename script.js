@@ -180,7 +180,7 @@ K: [
   {
     k: [1,5],
     f: [[10,1]],
-    n: [[11,1]],
+    n: [],
   },
 ],
 
@@ -258,7 +258,7 @@ K: [
   },
   {
     k: [0, 9],
-    f: [[11,10]],
+    f: [],
     n: [[10,10],[9,10]]
   }
   
@@ -325,7 +325,7 @@ m:
 11041100000\
 11000000000\
 11100011111\
-11100111111`,
+11101111111`,
 
 s: [4,5],
 
@@ -466,7 +466,7 @@ vymax = 1,
 heroscale = 1,
 padding = speed_x + 0.01,
 c = A.getContext`2d`,
-currentlevel = 0,
+currentlevel = 10,
 canjumpagain,
 shiftframe,
 askshift,
@@ -519,7 +519,8 @@ load = n => {
   grounded = 0;
   shifted = 0;
   heroscale = 1;
-  m = levels[n].m;
+  M = levels[n].m;
+  m = M.split``;
   A.style.transform = ``;
   if(levels[n].K){
     for(i of levels[n].K){
@@ -534,6 +535,7 @@ load(currentlevel);
 setInterval(() => {
   
   //console.log(s);
+  
 
   // Reset
   A.width ^= 0;
@@ -542,7 +544,13 @@ setInterval(() => {
   if(shiftframe && shiftframe < 9){
     A.style.transform = `rotate(${(10 - shiftframe) / 20}turn)`;
     if(shiftframe == 1){
-      m=m.split``.reverse().join``.replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4);
+      
+      // Make an array from the map
+      m = M.split``;
+      
+      if(!shifted){
+        m = m.reverse().join``.replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4).split``;
+      }
       A.style.transform = ``;
       x = 10 - x + .3;
       y = 10 - y;
@@ -551,7 +559,7 @@ setInterval(() => {
     }
   }
   
-  // Draw m
+  // Draw map
   if(wonframe > 10 || !wonframe){
     for(i = 0; i < gridsize; i++){
       for(j = 0; j < gridsize; j++){
@@ -572,7 +580,7 @@ setInterval(() => {
           c.fill();
         }
         
-        // Door n white cell
+        // Door on white cell
         else if((!shifted && a == 3) || (shifted && a == 4)){
         
           // Door
@@ -584,7 +592,7 @@ setInterval(() => {
           c.fillRect(i*cellsize + 42, j*cellsize + (shifted ? 27 : 37), 7, 4);
         }
         
-        // Door n black cell
+        // Door on black cell
         else if((!shifted && a == 4)||(shifted && a == 3)){
           
           // Black cell
@@ -601,12 +609,12 @@ setInterval(() => {
       }
     }
     
-    // Draw K and platforms
+    // Draw keys and platforms
     if(levels[currentlevel].K){
       c.fillStyle = `#aaa`;
       for(i of levels[currentlevel].K){
       
-        // Draw k
+        // Draw key
         if(!i.t){
           c.beginPath();
           if(shifted){
@@ -617,27 +625,19 @@ setInterval(() => {
           }
           c.fill();
           c.closePath();
-            
-          // Draw platform mode n
-          for(j of i.f){
-            if(shifted){
-              c.fillRect((10 - j[0]) * cellsize, (10 - j[1]) * cellsize, cellsize, cellsize);
-            }
-            else {
-              c.fillRect(j[0] * cellsize, j[1] *cellsize, cellsize, cellsize);
-            }
-          }
         }
-       
-        // Draw platform mode f
-        else{
-          for(j of i.n){
-            if(shifted){
-              c.fillRect((10 - j[0]) * cellsize, (10 - j[1]) * cellsize, cellsize, cellsize);
-            }
-            else {
-              c.fillRect(j[0] * cellsize, j[1] * cellsize, cellsize, cellsize);
-            }
+        
+          
+        // Draw platform and make the cell behind a "9" to avoid shifting into a platform
+        for(j of i[i.t?`n`:`f`]){
+          if(shifted){
+            c.fillRect((10 - j[0]) * cellsize, (10 - j[1]) * cellsize, cellsize, cellsize);
+            m[(10 - j[0])+(10 - j[1]) * gridsize] = 9;
+          }
+          else {
+            //console.log(i);
+            c.fillRect(j[0] * cellsize, j[1] * cellsize, cellsize, cellsize);
+            m[j[0] + j[1] * gridsize] = 9;
           }
         }
       }
@@ -754,7 +754,7 @@ setInterval(() => {
       y = ~~(y + h) - h;
     }
 
-    // Hit box Left
+    // Hit box left
     if(isSolid(x, y + padding) || isSolid(x, y + h - padding)){
       //console.log(`hit box left`);
       x = Math.ceil(x);
@@ -806,6 +806,7 @@ setInterval(() => {
             && ~~y < i.k[1] + 1
           ){
             i.t = 1;
+            m = M.split``;
           }
         }
         else {
@@ -817,6 +818,8 @@ setInterval(() => {
             && ~~y < 10 - i.k[1] + 1
           ){
             i.t = 1;
+            m = M.split``;
+            m = m.reverse().join``.replace(/0/g, 9).replace(/1/g, 0).replace(/9/g,1).replace(/3/g, 9).replace(/4/g, 3).replace(/9/g, 4).split``;
           }
         }
       }
